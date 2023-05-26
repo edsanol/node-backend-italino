@@ -3,7 +3,7 @@ import morgan from "morgan";
 import cors from "cors";
 import { container } from "./config/inversify.config";
 import { UserRoutes } from "./routes/user.routes";
-import { setupSwagger } from "./config/swagger";
+import swaggerDocs from "./config/swagger";
 
 const app = express();
 
@@ -17,6 +17,6 @@ const userRoutes = container.resolve<UserRoutes>(UserRoutes);
 userRoutes.configureRoutes(app);
 
 // Configuración de Swagger
-setupSwagger(app);
+swaggerDocs(app, 3000);
 
 export default app;

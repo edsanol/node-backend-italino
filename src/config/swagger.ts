@@ -1,19 +1,43 @@
-import { Application } from "express";
-import swaggerJsdoc, { Options } from "swagger-jsdoc";
+import { Express, Request, Response } from "express";
+import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-export const setupSwagger = (app: Application) => {
-  const options: Options = {
-    swaggerDefinition: {
-      openapi: "3.0.0",
-      info: {
-        title: "API Documentation",
-        version: "1.0.0",
+const options: swaggerJsdoc.Options = {
+  definition: {
+    openapi: "3.0.0",
+    info: {
+      title: "REST API Docs",
+      version: "1.0.0",
+    },
+    components: {
+      securitySchemas: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
       },
     },
-    apis: ["./src/routes/*.routes.ts"], // Ruta donde se encuentran tus archivos de rutas
-  };
-
-  const specs = swaggerJsdoc(options);
-  app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+  },
+  apis: ["./src/routes/*.routes.ts"], // Ruta donde se encuentran tus archivos de rutas
 };
+
+const swaggerSpec = swaggerJsdoc(options);
+
+function swaggerDocs(app: Express, port: number) {
+  // Swagger page
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+  // Docs in JSON format
+  app.get("/docs.json", (req: Request, res: Response) => {
+    res.setHeader("Content-Type", "application/json");
+    res.send(swaggerSpec);
+  });
+}
+
+export default swaggerDocs;
