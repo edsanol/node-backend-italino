@@ -21,6 +21,17 @@ import { GetCategoryUseCase } from "../usercases/category/get-category.usecase";
 import { UpdateCategoryUseCase } from "../usercases/category/update-category.usecase";
 import { CategoryController } from "../controllers/category.controller";
 import { CategoryRoutes } from "../routes/category.routes";
+import { InventoryRepositoryInterface } from "../domain/repositories/inventory.repository.interface";
+import { InventoryRepositoryImpl } from "../repositories/inventory.repository";
+import { InventoryServiceInterface } from "../interfaces/inventory.service.interface";
+import { InventoryServiceImpl } from "../services/inventory.service";
+import { CreateInventoryUseCase } from "../usercases/inventory/create-inventory.usecase";
+import { GetAllInventoriesUseCase } from "../usercases/inventory/getall-inventory.usecase";
+import { GetInventoryUseCase } from "../usercases/inventory/get-inventory.usecase";
+import { DeleteInventoryUseCase } from "../usercases/inventory/delete-inventory.usecase";
+import { UpdateInventoryUseCase } from "../usercases/inventory/update-inventory.usecase";
+import { InventoryController } from "../controllers/inventory.controller";
+import { InventoryRoutes } from "../routes/inventory.routes";
 
 const container = new Container();
 
@@ -33,12 +44,19 @@ container
   .bind<CategoryRepositoryInterface>(TYPES.CategoryRepository)
   .to(CategoryRepositoryImpl)
   .inSingletonScope();
+container
+  .bind<InventoryRepositoryInterface>(TYPES.InventoryRepository)
+  .to(InventoryRepositoryImpl)
+  .inSingletonScope();
 
 // Services
 container.bind<UserServiceInterface>(TYPES.UserService).to(UserServiceImpl);
 container
   .bind<CategoryServiceInterface>(TYPES.CategoryService)
   .to(CategoryServiceImpl);
+container
+  .bind<InventoryServiceInterface>(TYPES.InventoryService)
+  .to(InventoryServiceImpl);
 
 // Use Cases
 container
@@ -68,14 +86,34 @@ container
   .bind<UpdateCategoryUseCase>(TYPES.UpdateCategoryUseCase)
   .to(UpdateCategoryUseCase);
 
+container
+  .bind<CreateInventoryUseCase>(TYPES.CreateInventoryUseCase)
+  .to(CreateInventoryUseCase);
+container
+  .bind<GetAllInventoriesUseCase>(TYPES.GetAllInventoriesUseCase)
+  .to(GetAllInventoriesUseCase);
+container
+  .bind<GetInventoryUseCase>(TYPES.GetInventoryUseCase)
+  .to(GetInventoryUseCase);
+container
+  .bind<DeleteInventoryUseCase>(TYPES.DeleteInventoryUseCase)
+  .to(DeleteInventoryUseCase);
+container
+  .bind<UpdateInventoryUseCase>(TYPES.UpdateInventoryUseCase)
+  .to(UpdateInventoryUseCase);
+
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);
 container
   .bind<CategoryController>(TYPES.CategoryController)
   .to(CategoryController);
+container
+  .bind<InventoryController>(TYPES.InventoryController)
+  .to(InventoryController);
 
 // Routes
 container.bind<UserRoutes>(TYPES.UserRoutes).to(UserRoutes);
 container.bind<CategoryRoutes>(TYPES.CategoryRoutes).to(CategoryRoutes);
+container.bind<InventoryRoutes>(TYPES.InventoryRoutes).to(InventoryRoutes);
 
 export { container };
