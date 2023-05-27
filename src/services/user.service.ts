@@ -5,7 +5,7 @@ import { injectable, inject } from "inversify";
 import { TYPES } from "../config/types";
 
 @injectable()
-export class UserService implements UserServiceInterface {
+export class UserServiceImpl implements UserServiceInterface {
   constructor(
     @inject(TYPES.UserRepository)
     private userRepository: UserRepositoryInterface
