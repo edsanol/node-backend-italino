@@ -6,7 +6,8 @@ import { TYPES } from "../../config/types";
 @injectable()
 export class CreateUserUseCase {
   constructor(
-    @inject(TYPES.UserService) private userService: UserServiceInterface
+    @inject(TYPES.UserService)
+    private userService: UserServiceInterface
   ) {}
 
   async execute(user: User): Promise<User> {

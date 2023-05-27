@@ -12,7 +12,8 @@ export class UserController {
   constructor(
     @inject(TYPES.CreateUserUseCase)
     private createUserUseCase: CreateUserUseCase,
-    @inject(TYPES.GetUserUseCase) private getUserUseCase: GetUserUseCase,
+    @inject(TYPES.GetUserUseCase)
+    private getUserUseCase: GetUserUseCase,
     @inject(TYPES.UpdateUserUseCase)
     private updateUserUseCase: UpdateUserUseCase,
     @inject(TYPES.DeleteUserUseCase)
@@ -23,7 +24,6 @@ export class UserController {
     try {
       const user: User = req.body;
       const newUser = await this.createUserUseCase.execute(user);
-      console.log("newUser", newUser);
       res.status(201).json(newUser);
     } catch (error: any) {
       res.status(500).json({ error: error.message });
