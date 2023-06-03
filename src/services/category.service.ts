@@ -3,6 +3,7 @@ import { CategoryServiceInterface } from "../interfaces/category.service.interfa
 import { inject, injectable } from "inversify";
 import { CategoryRepositoryInterface } from "../domain/repositories/category.repository.interface";
 import { TYPES } from "../config/types";
+import { ICategoryDto } from "../dto/categoryDto";
 
 @injectable()
 export class CategoryServiceImpl implements CategoryServiceInterface {
@@ -11,7 +12,7 @@ export class CategoryServiceImpl implements CategoryServiceInterface {
     private categoryRepository: CategoryRepositoryInterface
   ) {}
 
-  async createCategory(category: Category): Promise<Category> {
+  async createCategory(category: ICategoryDto): Promise<Category> {
     const newCategory = await this.categoryRepository.createCategory(category);
     return newCategory;
   }

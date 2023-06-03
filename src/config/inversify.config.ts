@@ -32,6 +32,28 @@ import { DeleteInventoryUseCase } from "../usercases/inventory/delete-inventory.
 import { UpdateInventoryUseCase } from "../usercases/inventory/update-inventory.usecase";
 import { InventoryController } from "../controllers/inventory.controller";
 import { InventoryRoutes } from "../routes/inventory.routes";
+import { ActivityRepositoryInterface } from "../domain/repositories/activity.repository.interface";
+import { ActivityRepositoryImpl } from "../repositories/activity.repository";
+import { ActivityServiceInterface } from "../interfaces/activity.service.interface";
+import { ActivityServiceImpl } from "../services/activity.service";
+import { CreateActivityUseCase } from "../usercases/activity/create-activity.usecase";
+import { GetActivityUseCase } from "../usercases/activity/get-activity.usecase";
+import { GetAllActivityUseCase } from "../usercases/activity/getall-activity.usecase";
+import { DeleteActivityUseCase } from "../usercases/activity/delete-activity.usecase";
+import { UpdateActivityUseCase } from "../usercases/activity/update-activity.usecase";
+import { ActivityController } from "../controllers/activity.controller";
+import { ActivityRoutes } from "../routes/activity.routes";
+import { RoleRepositoryInterface } from "../domain/repositories/role.repository.interface";
+import { RoleRepositoryImpl } from "../repositories/role.repository";
+import { RoleServiceInterface } from "../interfaces/role.service.interface";
+import { RoleServiceImpl } from "../services/role.service";
+import { CreateRoleUseCase } from "../usercases/role/create-role.usecase";
+import { GetRoleUseCase } from "../usercases/role/get-role.usecase";
+import { GetAllRolesUseCase } from "../usercases/role/getall-role.usecase";
+import { DeleteRoleUseCase } from "../usercases/role/delete-role.usecase";
+import { UpdateRoleUseCase } from "../usercases/role/update-role.usecase";
+import { RoleController } from "../controllers/role.controller";
+import { RoleRoutes } from "../routes/role.routes";
 
 const container = new Container();
 
@@ -48,6 +70,14 @@ container
   .bind<InventoryRepositoryInterface>(TYPES.InventoryRepository)
   .to(InventoryRepositoryImpl)
   .inSingletonScope();
+container
+  .bind<ActivityRepositoryInterface>(TYPES.ActivityRepository)
+  .to(ActivityRepositoryImpl)
+  .inSingletonScope();
+container
+  .bind<RoleRepositoryInterface>(TYPES.RoleRepository)
+  .to(RoleRepositoryImpl)
+  .inSingletonScope();
 
 // Services
 container.bind<UserServiceInterface>(TYPES.UserService).to(UserServiceImpl);
@@ -57,6 +87,10 @@ container
 container
   .bind<InventoryServiceInterface>(TYPES.InventoryService)
   .to(InventoryServiceImpl);
+container
+  .bind<ActivityServiceInterface>(TYPES.ActivityService)
+  .to(ActivityServiceImpl);
+container.bind<RoleServiceInterface>(TYPES.RoleService).to(RoleServiceImpl);
 
 // Use Cases
 container
@@ -102,6 +136,36 @@ container
   .bind<UpdateInventoryUseCase>(TYPES.UpdateInventoryUseCase)
   .to(UpdateInventoryUseCase);
 
+container
+  .bind<CreateActivityUseCase>(TYPES.CreateActivityUseCase)
+  .to(CreateActivityUseCase);
+container
+  .bind<GetActivityUseCase>(TYPES.GetActivityUseCase)
+  .to(GetActivityUseCase);
+container
+  .bind<GetAllActivityUseCase>(TYPES.GetAllActivitiesUseCase)
+  .to(GetAllActivityUseCase);
+container
+  .bind<DeleteActivityUseCase>(TYPES.DeleteActivityUseCase)
+  .to(DeleteActivityUseCase);
+container
+  .bind<UpdateActivityUseCase>(TYPES.UpdateActivityUseCase)
+  .to(UpdateActivityUseCase);
+
+container
+  .bind<CreateRoleUseCase>(TYPES.CreateRoleUseCase)
+  .to(CreateRoleUseCase);
+container.bind<GetRoleUseCase>(TYPES.GetRoleUseCase).to(GetRoleUseCase);
+container
+  .bind<GetAllRolesUseCase>(TYPES.GetAllRolesUseCase)
+  .to(GetAllRolesUseCase);
+container
+  .bind<DeleteRoleUseCase>(TYPES.DeleteRoleUseCase)
+  .to(DeleteRoleUseCase);
+container
+  .bind<UpdateRoleUseCase>(TYPES.UpdateRoleUseCase)
+  .to(UpdateRoleUseCase);
+
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);
 container
@@ -110,10 +174,16 @@ container
 container
   .bind<InventoryController>(TYPES.InventoryController)
   .to(InventoryController);
+container
+  .bind<ActivityController>(TYPES.ActivityController)
+  .to(ActivityController);
+container.bind<RoleController>(TYPES.RoleController).to(RoleController);
 
 // Routes
 container.bind<UserRoutes>(TYPES.UserRoutes).to(UserRoutes);
 container.bind<CategoryRoutes>(TYPES.CategoryRoutes).to(CategoryRoutes);
 container.bind<InventoryRoutes>(TYPES.InventoryRoutes).to(InventoryRoutes);
+container.bind<ActivityRoutes>(TYPES.ActivityRoutes).to(ActivityRoutes);
+container.bind<RoleRoutes>(TYPES.RoleRoutes).to(RoleRoutes);
 
 export { container };

@@ -2,6 +2,8 @@ import { DataSource } from "typeorm";
 import { User } from "./domain/models/user.model";
 import { Category } from "./domain/models/category.model";
 import { Inventory } from "./domain/models/inventory.model";
+import { Role } from "./domain/models/role.model";
+import { Activity } from "./domain/models/activity.model";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -10,7 +12,7 @@ export const AppDataSource = new DataSource({
   username: "root",
   password: "password",
   database: "italinodb",
-  entities: [User, Category, Inventory],
+  entities: [User, Category, Role, Inventory, Activity],
   logging: true,
   synchronize: true,
 });

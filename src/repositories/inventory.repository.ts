@@ -1,30 +1,38 @@
 import { injectable } from "inversify";
 import { InventoryRepositoryInterface } from "../domain/repositories/inventory.repository.interface";
 import { Inventory } from "../domain/models/inventory.model";
+import { Category } from "../domain/models/category.model";
 import { AppDataSource } from "../db";
 import { Repository } from "typeorm";
+import { IInventoryDto } from "../dto/inventoryDto";
 
 @injectable()
 export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
   private readonly db: Repository<Inventory>;
+  private readonly dbCategory: Repository<Category>;
 
   constructor() {
     this.db = AppDataSource.getRepository(Inventory);
+    this.dbCategory = AppDataSource.getRepository(Category);
   }
-  async createInventory(inventory: Inventory): Promise<Inventory> {
+  async createInventory(inventory: IInventoryDto): Promise<Inventory> {
+    const category = await this.dbCategory.findOneByOrFail({
+      id_category: inventory.categoryId,
+    });
+
     const newInventory = new Inventory();
-    newInventory.reference_inventory = inventory.reference_inventory;
-    newInventory.name_inventory = inventory.name_inventory;
-    newInventory.id_category = inventory.id_category;
-    newInventory.description_inventory = inventory.description_inventory;
-    newInventory.stock_inventory = inventory.stock_inventory;
-    newInventory.status_inventory = inventory.status_inventory;
-    newInventory.selling_price_inventory = inventory.selling_price_inventory;
-    newInventory.cost_price_inventory = inventory.cost_price_inventory;
-    newInventory.image_inventory = inventory.image_inventory;
-    newInventory.publicated_inventory = inventory.publicated_inventory;
+    newInventory.reference_inventory = inventory.inventoryReference;
+    newInventory.name_inventory = inventory.inventoryName;
+    newInventory.description_inventory = inventory.inventoryDescription;
+    newInventory.stock_inventory = inventory.inventoryStock;
+    newInventory.status_inventory = inventory.inventoryStatus;
+    newInventory.selling_price_inventory = inventory.inventorySellingPrice;
+    newInventory.cost_price_inventory = inventory.inventoryCostPrice;
+    newInventory.image_inventory = inventory.inventoryImage;
+    newInventory.publicated_inventory = inventory.inventoryPublicated;
     newInventory.created_at = new Date();
     newInventory.updated_at = new Date();
+    newInventory.category = category;
 
     return this.db.manager.save(newInventory);
   }

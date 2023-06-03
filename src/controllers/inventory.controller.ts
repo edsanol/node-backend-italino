@@ -7,6 +7,7 @@ import { UpdateInventoryUseCase } from "../usercases/inventory/update-inventory.
 import { DeleteInventoryUseCase } from "../usercases/inventory/delete-inventory.usecase";
 import { Request, Response } from "express";
 import { Inventory } from "../domain/models/inventory.model";
+import { IInventoryDto } from "../dto/inventoryDto";
 
 @injectable()
 export class InventoryController {
@@ -25,7 +26,7 @@ export class InventoryController {
 
   async createInventory(req: Request, res: Response): Promise<void> {
     try {
-      const inventory: Inventory = req.body;
+      const inventory: IInventoryDto = req.body;
       const newInventory = await this.createInventoryUseCase.execute(inventory);
       res.status(201).json({
         success: true,

@@ -3,6 +3,7 @@ import { InventoryServiceInterface } from "../interfaces/inventory.service.inter
 import { InventoryRepositoryInterface } from "../domain/repositories/inventory.repository.interface";
 import { TYPES } from "../config/types";
 import { Inventory } from "domain/models/inventory.model";
+import { IInventoryDto } from "../dto/inventoryDto";
 
 @injectable()
 export class InventoryServiceImpl implements InventoryServiceInterface {
@@ -10,7 +11,7 @@ export class InventoryServiceImpl implements InventoryServiceInterface {
     @inject(TYPES.InventoryRepository)
     private inventoryRepository: InventoryRepositoryInterface
   ) {}
-  async createInventory(inventory: Inventory): Promise<Inventory> {
+  async createInventory(inventory: IInventoryDto): Promise<Inventory> {
     const newInventory = await this.inventoryRepository.createInventory(
       inventory
     );
