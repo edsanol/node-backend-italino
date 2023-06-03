@@ -13,13 +13,16 @@ export class Category {
   @PrimaryGeneratedColumn()
   id_category: number;
 
-  @Column()
+  @Column({ length: 120 })
   reference_category: string;
 
-  @Column()
+  @Column({ length: 150 })
   name_category: string;
 
-  @Column()
+  @Column({ length: 220 })
+  description_category: string;
+
+  @Column({ length: 60 })
   status_category: string;
 
   @CreateDateColumn()

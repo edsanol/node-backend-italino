@@ -14,22 +14,19 @@ export class Inventory {
   @PrimaryGeneratedColumn()
   id_inventory: number;
 
-  @Column()
+  @Column({ length: 120 })
   reference_inventory: string;
 
-  @Column()
+  @Column({ length: 150 })
   name_inventory: string;
 
-  @Column()
-  id_category: number;
-
-  @Column()
+  @Column({ length: 220 })
   description_inventory: string;
 
   @Column()
   stock_inventory: number;
 
-  @Column()
+  @Column({ length: 60 })
   status_inventory: string;
 
   @Column()

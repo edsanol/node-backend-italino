@@ -7,6 +7,7 @@ import { UpdateCategoryUseCase } from "../usercases/category/update-category.use
 import { DeleteCategoryUseCase } from "../usercases/category/delete-category.usecase";
 import { Category } from "../domain/models/category.model";
 import { Request, Response } from "express";
+import { ICategoryDto } from "../dto/categoryDto";
 
 @injectable()
 export class CategoryController {
@@ -25,7 +26,7 @@ export class CategoryController {
 
   async createCategory(req: Request, res: Response): Promise<void> {
     try {
-      const category: Category = req.body;
+      const category: ICategoryDto = req.body;
       const newCategory = await this.createCategoryUseCase.execute(category);
       res.status(201).json({
         success: true,
@@ -36,7 +37,7 @@ export class CategoryController {
       res.status(500).json({
         success: false,
         message: "Error creating category",
-        error: error.message,
+        error: `Error creating category ${error.message}`,
       });
     }
   }
@@ -53,7 +54,7 @@ export class CategoryController {
       res.status(500).json({
         success: false,
         message: "Error retrieving categories",
-        error: error.message,
+        error: `Error retrieving categories ${error.message}`,
       });
     }
   }
@@ -79,7 +80,7 @@ export class CategoryController {
       res.status(500).json({
         success: false,
         message: "Error retrieving category",
-        error: error.message,
+        error: `Error retrieving categories ${error.message}`,
       });
     }
   }
@@ -135,7 +136,7 @@ export class CategoryController {
       res.status(500).json({
         success: false,
         message: "Error deleting category",
-        error: error.message,
+        error: `Error deleting category ${error.message}`,
       });
     }
   }

@@ -3,6 +3,7 @@ import { CategoryRepositoryInterface } from "../domain/repositories/category.rep
 import { injectable } from "inversify";
 import { Repository } from "typeorm";
 import { AppDataSource } from "../db";
+import { ICategoryDto } from "../dto/categoryDto";
 
 @injectable()
 export class CategoryRepositoryImpl implements CategoryRepositoryInterface {
@@ -12,11 +13,12 @@ export class CategoryRepositoryImpl implements CategoryRepositoryInterface {
     this.db = AppDataSource.getRepository(Category);
   }
 
-  async createCategory(category: Category): Promise<Category> {
+  async createCategory(category: ICategoryDto): Promise<Category> {
     const newCategory = new Category();
-    newCategory.reference_category = category.reference_category;
-    newCategory.name_category = category.name_category;
-    newCategory.status_category = category.status_category;
+    newCategory.reference_category = category.categoryReference;
+    newCategory.name_category = category.categoryName;
+    newCategory.status_category = category.categoryStatus;
+    newCategory.description_category = category.categoryDescription;
     newCategory.created_at = new Date();
     newCategory.updated_at = new Date();
 
