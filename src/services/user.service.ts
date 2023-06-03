@@ -12,7 +12,7 @@ export class UserServiceImpl implements UserServiceInterface {
     private userRepository: UserRepositoryInterface
   ) {}
 
-  async createUser(user: IUserDto): Promise<User> {
+  async createUser(user: IUserDto): Promise<User | null> {
     const newUser = await this.userRepository.createUser(user);
     return newUser;
   }

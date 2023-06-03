@@ -11,7 +11,7 @@ export class CreateUserUseCase {
     private userService: UserServiceInterface
   ) {}
 
-  async execute(user: IUserDto): Promise<User> {
+  async execute(user: IUserDto): Promise<User | null> {
     const newUser = await this.userService.createUser(user);
     return newUser;
   }
