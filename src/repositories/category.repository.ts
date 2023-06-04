@@ -15,10 +15,10 @@ export class CategoryRepositoryImpl implements CategoryRepositoryInterface {
 
   async createCategory(category: ICategoryDto): Promise<Category> {
     const newCategory = new Category();
-    newCategory.reference_category = category.categoryReference;
-    newCategory.name_category = category.categoryName;
-    newCategory.status_category = category.categoryStatus;
-    newCategory.description_category = category.categoryDescription;
+    newCategory.reference_category = category.referenceCategory;
+    newCategory.name_category = category.nameCategory;
+    newCategory.status_category = category.statusCategory;
+    newCategory.description_category = category.descriptionCategory;
     newCategory.created_at = new Date();
     newCategory.updated_at = new Date();
 
