@@ -1,9 +1,9 @@
 export interface ICategoryDto {
-  categoryId?: number;
-  categoryReference: string;
-  categoryName: string;
-  categoryDescription: string;
-  categoryStatus: string;
+  idCategory?: number;
+  referenceCategory: string;
+  nameCategory: string;
+  descriptionCategory: string;
+  statusCategory: string;
   createdAt?: Date;
   updatedAt?: Date;
 }
