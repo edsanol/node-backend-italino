@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
 } from "typeorm";
 import { Role } from "./role.model";
 
@@ -34,6 +35,6 @@ export class User {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @OneToMany(() => Role, (role) => role.user)
-  roles: Role[];
+  @ManyToOne(() => Role, (role) => role.users)
+  rol: Role;
 }

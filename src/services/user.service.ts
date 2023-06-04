@@ -3,6 +3,7 @@ import { UserServiceInterface } from "../interfaces/user.service.interface";
 import { UserRepositoryInterface } from "../domain/repositories/user.repository.interface";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../config/types";
+import { IUserDto } from "../dto/userDto";
 
 @injectable()
 export class UserServiceImpl implements UserServiceInterface {
@@ -11,7 +12,7 @@ export class UserServiceImpl implements UserServiceInterface {
     private userRepository: UserRepositoryInterface
   ) {}
 
-  async createUser(user: User): Promise<User> {
+  async createUser(user: IUserDto): Promise<User | null> {
     const newUser = await this.userRepository.createUser(user);
     return newUser;
   }
@@ -21,7 +22,7 @@ export class UserServiceImpl implements UserServiceInterface {
     return user;
   }
 
-  async updateUser(userId: number, data: Partial<User>): Promise<boolean> {
+  async updateUser(userId: number, data: Partial<IUserDto>): Promise<boolean> {
     const isUpdated = await this.userRepository.updateUser(userId, data);
     return isUpdated;
   }

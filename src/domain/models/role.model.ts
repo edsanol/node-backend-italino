@@ -7,6 +7,7 @@ import {
   ManyToOne,
   ManyToMany,
   JoinTable,
+  OneToMany,
 } from "typeorm";
 import { User } from "./user.model";
 import { Activity } from "./activity.model";
@@ -31,8 +32,8 @@ export class Role {
   @UpdateDateColumn()
   updated_at: Date;
 
-  @ManyToOne(() => User, (user) => user.roles)
-  user: User;
+  @OneToMany(() => User, (user) => user.rol)
+  users: User[];
 
   @ManyToMany(() => Activity)
   @JoinTable()

@@ -6,6 +6,7 @@ import { DeleteUserUseCase } from "../usercases/user/delete-user.usecase";
 import { User } from "../domain/models/user.model";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../config/types";
+import { IUserDto } from "../dto/userDto";
 
 @injectable()
 export class UserController {
@@ -22,7 +23,7 @@ export class UserController {
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
-      const user: User = req.body;
+      const user: IUserDto = req.body;
       const newUser = await this.createUserUseCase.execute(user);
       res.status(201).json(newUser);
     } catch (error: any) {
@@ -47,7 +48,7 @@ export class UserController {
   async updateUser(req: Request, res: Response): Promise<void> {
     try {
       const userId: number = Number(req.params.userId);
-      const data: Partial<User> = req.body;
+      const data: Partial<IUserDto> = req.body;
       const isUpdated = await this.updateUserUseCase.execute(userId, data);
       if (isUpdated) {
         res.json({ success: true });
