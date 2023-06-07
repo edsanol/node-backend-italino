@@ -11,6 +11,10 @@ export class UserRoutes {
   ) {}
 
   configureRoutes(router: Router): void {
+    router.get(
+      "/users",
+      this.userController.getAllUsers.bind(this.userController)
+    );
     router.post(
       "/users",
       this.userController.createUser.bind(this.userController)

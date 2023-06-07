@@ -1,8 +1,8 @@
 export interface IRoleDto {
-  roleId?: number;
-  roleName: string;
-  roleDescription: string;
-  roleStatus: string;
+  idRole?: number;
+  nameRole: string;
+  descriptionRole: string;
+  statusRole: string;
   createdAt?: Date;
   updatedAt?: Date;
   activityId: number[];

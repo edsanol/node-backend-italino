@@ -54,6 +54,7 @@ import { DeleteRoleUseCase } from "../usercases/role/delete-role.usecase";
 import { UpdateRoleUseCase } from "../usercases/role/update-role.usecase";
 import { RoleController } from "../controllers/role.controller";
 import { RoleRoutes } from "../routes/role.routes";
+import { GetAllUsersUseCase } from "../usercases/user/getAll-user.usecase";
 
 const container = new Container();
 
@@ -103,6 +104,9 @@ container
 container
   .bind<DeleteUserUseCase>(TYPES.DeleteUserUseCase)
   .to(DeleteUserUseCase);
+container
+  .bind<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase)
+  .to(GetAllUsersUseCase);
 
 container
   .bind<CreateCategoryUseCase>(TYPES.CreateCategoryUseCase)

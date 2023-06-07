@@ -15,16 +15,28 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
     this.db = AppDataSource.getRepository(User);
     this.dbRole = AppDataSource.getRepository(Role);
   }
+  async getAllUsers(): Promise<User[] | null> {
+    const allUsers = await this.db
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.rol", "rol")
+      .getMany();
+
+    if (!allUsers) {
+      return null;
+    }
+
+    return allUsers;
+  }
 
   async createUser(user: IUserDto): Promise<User | null> {
     const role = await this.dbRole.findOneByOrFail({ id_role: user.roleId });
 
     const newUser = new User();
-    newUser.name_user = user.userName;
-    newUser.phone_user = user.userPhone;
-    newUser.password_user = user.userPassword;
-    newUser.status_user = user.userStatus;
-    newUser.email_user = user.userEmail;
+    newUser.name_user = user.nameUser;
+    newUser.phone_user = user.phoneUser;
+    newUser.password_user = user.passwordUser;
+    newUser.status_user = user.statusUser;
+    newUser.email_user = user.emailUser;
     newUser.created_at = new Date();
     newUser.updated_at = new Date();
     newUser.rol = role;
