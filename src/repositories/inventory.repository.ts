@@ -21,15 +21,15 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     });
 
     const newInventory = new Inventory();
-    newInventory.reference_inventory = inventory.inventoryReference;
-    newInventory.name_inventory = inventory.inventoryName;
-    newInventory.description_inventory = inventory.inventoryDescription;
-    newInventory.stock_inventory = inventory.inventoryStock;
-    newInventory.status_inventory = inventory.inventoryStatus;
-    newInventory.selling_price_inventory = inventory.inventorySellingPrice;
-    newInventory.cost_price_inventory = inventory.inventoryCostPrice;
-    newInventory.image_inventory = inventory.inventoryImage;
-    newInventory.publicated_inventory = inventory.inventoryPublicated;
+    newInventory.reference_inventory = inventory.referenceInventory;
+    newInventory.name_inventory = inventory.nameInventory;
+    newInventory.description_inventory = inventory.descriptionInventory;
+    newInventory.stock_inventory = inventory.stockInventory;
+    newInventory.status_inventory = inventory.statusInventory;
+    newInventory.selling_price_inventory = inventory.sellingPriceInventory;
+    newInventory.cost_price_inventory = inventory.costPriceInventory;
+    newInventory.image_inventory = inventory.imageInventory;
+    newInventory.publicated_inventory = inventory.publicatedInventory;
     newInventory.created_at = new Date();
     newInventory.updated_at = new Date();
     newInventory.category = category;

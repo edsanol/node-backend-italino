@@ -35,7 +35,7 @@ export class Inventory {
   @Column()
   cost_price_inventory: number;
 
-  @Column()
+  @Column({ length: 600 })
   image_inventory: string;
 
   @Column()
