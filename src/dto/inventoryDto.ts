@@ -1,14 +1,14 @@
 export interface IInventoryDto {
-  inventoryId?: number;
-  inventoryReference: string;
-  inventoryName: string;
-  inventoryDescription: string;
-  inventoryStock: number;
-  inventoryStatus: string;
-  inventorySellingPrice: number;
-  inventoryCostPrice: number;
-  inventoryImage: string;
-  inventoryPublicated: boolean;
+  idInventory?: number;
+  referenceInventory: string;
+  nameInventory: string;
+  descriptionInventory: string;
+  stockInventory: number;
+  statusInventory: string;
+  sellingPriceInventory: number;
+  costPriceInventory: number;
+  imageInventory: string;
+  publicatedInventory: boolean;
   createdAt?: Date;
   updatedAt?: Date;
   categoryId: number;
