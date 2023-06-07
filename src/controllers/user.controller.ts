@@ -7,6 +7,7 @@ import { User } from "../domain/models/user.model";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../config/types";
 import { IUserDto } from "../dto/userDto";
+import { GetAllUsersUseCase } from "../usercases/user/getAll-user.usecase";
 
 @injectable()
 export class UserController {
@@ -18,16 +19,26 @@ export class UserController {
     @inject(TYPES.UpdateUserUseCase)
     private updateUserUseCase: UpdateUserUseCase,
     @inject(TYPES.DeleteUserUseCase)
-    private deleteUserUseCase: DeleteUserUseCase
+    private deleteUserUseCase: DeleteUserUseCase,
+    @inject(TYPES.GetAllUsersUseCase)
+    private getAllUsersUseCase: GetAllUsersUseCase
   ) {}
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
       const user: IUserDto = req.body;
       const newUser = await this.createUserUseCase.execute(user);
-      res.status(201).json(newUser);
+      res.status(201).json({
+        success: true,
+        message: "User created",
+        data: newUser,
+      });
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error creating user ${error.message}`,
+      });
     }
   }
 
@@ -36,12 +47,41 @@ export class UserController {
       const userId: number = Number(req.params.userId);
       const user = await this.getUserUseCase.execute(userId);
       if (user) {
-        res.json(user);
+        res.status(201).json({
+          success: true,
+          message: "User",
+          data: user,
+        });
       } else {
-        res.status(404).json({ error: "User not found" });
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+          error: "User not found",
+        });
       }
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting user ${error.message}`,
+      });
+    }
+  }
+
+  async getAllUsers(req: Request, res: Response): Promise<void> {
+    try {
+      const allUsers = await this.getAllUsersUseCase.execute();
+      res.status(201).json({
+        success: true,
+        message: "All users",
+        data: allUsers,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting all users ${error.message}`,
+      });
     }
   }
 
@@ -51,12 +91,24 @@ export class UserController {
       const data: Partial<IUserDto> = req.body;
       const isUpdated = await this.updateUserUseCase.execute(userId, data);
       if (isUpdated) {
-        res.json({ success: true });
+        res.status(200).json({
+          success: true,
+          message: "User updated successfully",
+          data: isUpdated,
+        });
       } else {
-        res.status(404).json({ error: "User not found" });
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+          error: "User not found",
+        });
       }
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error updating user ${error.message}`,
+      });
     }
   }
 
@@ -65,12 +117,24 @@ export class UserController {
       const userId: number = Number(req.params.userId);
       const isDeleted = await this.deleteUserUseCase.execute(userId);
       if (isDeleted) {
-        res.json({ success: true });
+        res.status(200).json({
+          success: true,
+          message: "User deleted successfully",
+          data: isDeleted,
+        });
       } else {
-        res.status(404).json({ error: "User not found" });
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+          error: "User not found",
+        });
       }
     } catch (error: any) {
-      res.status(500).json({ error: error.message });
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error deleting user ${error.message}`,
+      });
     }
   }
 }

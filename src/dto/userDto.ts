@@ -1,10 +1,10 @@
 export interface IUserDto {
   userId?: number;
-  userName: string;
-  userPhone: string;
-  userEmail: string;
-  userPassword: string;
-  userStatus: string;
+  nameUser: string;
+  phoneUser: string;
+  emailUser: string;
+  passwordUser: string;
+  statusUser: string;
   createdAt?: Date;
   updatedAt?: Date;
   roleId?: number;

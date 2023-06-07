@@ -22,9 +22,9 @@ export class RoleRepositoryImpl implements RoleRepositoryInterface {
     });
 
     const newRole = new Role();
-    newRole.name_role = role.roleName;
-    newRole.description_role = role.roleDescription;
-    newRole.status_role = role.roleStatus;
+    newRole.name_role = role.nameRole;
+    newRole.description_role = role.descriptionRole;
+    newRole.status_role = role.statusRole;
     newRole.created_at = new Date();
     newRole.updated_at = new Date();
     newRole.activities = activity;
@@ -32,7 +32,10 @@ export class RoleRepositoryImpl implements RoleRepositoryInterface {
     return this.db.manager.save(newRole);
   }
   async getAllRoles(): Promise<Role[] | null> {
-    const allRoles = await this.db.find();
+    const allRoles = await this.db
+      .createQueryBuilder("role")
+      .leftJoinAndSelect("role.activities", "activity")
+      .getMany();
 
     if (!allRoles) {
       return null;
@@ -60,9 +63,9 @@ export class RoleRepositoryImpl implements RoleRepositoryInterface {
       return false;
     }
 
-    roleToUpdate.name_role = role.roleName;
-    roleToUpdate.description_role = role.roleDescription;
-    roleToUpdate.status_role = role.roleStatus;
+    roleToUpdate.name_role = role.nameRole;
+    roleToUpdate.description_role = role.descriptionRole;
+    roleToUpdate.status_role = role.statusRole;
     roleToUpdate.updated_at = new Date();
 
     await this.db.manager.save(roleToUpdate);
