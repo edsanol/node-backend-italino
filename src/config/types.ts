@@ -4,12 +4,14 @@ const TYPES = {
   InventoryRepository: Symbol.for("InventoryRepository"),
   ActivityRepository: Symbol.for("ActivityRepository"),
   RoleRepository: Symbol.for("RoleRepository"),
+  CustomerRepository: Symbol.for("CustomerRepository"),
 
   UserService: Symbol.for("UserService"),
   CategoryService: Symbol.for("CategoryService"),
   InventoryService: Symbol.for("InventoryService"),
   ActivityService: Symbol.for("ActivityService"),
   RoleService: Symbol.for("RoleService"),
+  CustomerService: Symbol.for("CustomerService"),
 
   CreateUserUseCase: Symbol.for("CreateUserUseCase"),
   GetUserUseCase: Symbol.for("GetUserUseCase"),
@@ -42,17 +44,26 @@ const TYPES = {
   GetRoleUseCase: Symbol.for("GetRoleUseCase"),
   UpdateRoleUseCase: Symbol.for("UpdateRoleUseCase"),
 
+  CreateCustomerUseCase: Symbol.for("CreateCustomerUseCase"),
+  GetAllCustomersUseCase: Symbol.for("GetAllCustomersUseCase"),
+  DeleteCustomerUseCase: Symbol.for("DeleteCustomerUseCase"),
+  GetCustomerUseCase: Symbol.for("GetCustomerUseCase"),
+  UpdateCustomerUseCase: Symbol.for("UpdateCustomerUseCase"),
+  GetCustomerByUserIdUseCase: Symbol.for("GetCustomerByUserIdUseCase"),
+
   UserController: Symbol.for("UserController"),
   CategoryController: Symbol.for("CategoryController"),
   InventoryController: Symbol.for("InventoryController"),
   ActivityController: Symbol.for("ActivityController"),
   RoleController: Symbol.for("RoleController"),
+  CustomerController: Symbol.for("CustomerController"),
 
   UserRoutes: Symbol.for("UserRoutes"),
   CategoryRoutes: Symbol.for("CategoryRoutes"),
   InventoryRoutes: Symbol.for("InventoryRoutes"),
   ActivityRoutes: Symbol.for("ActivityRoutes"),
   RoleRoutes: Symbol.for("RoleRoutes"),
+  CustomerRoutes: Symbol.for("CustomerRoutes"),
 };
 
 export { TYPES };

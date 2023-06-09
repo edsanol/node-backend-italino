@@ -7,6 +7,7 @@ import {
   ManyToOne,
 } from "typeorm";
 import { Role } from "./role.model";
+import { Customer } from "./customer.model";
 
 @Entity()
 export class User {
@@ -36,4 +37,7 @@ export class User {
 
   @ManyToOne(() => Role, (role) => role.users)
   rol: Role;
+
+  @OneToMany(() => Customer, (customer) => customer.user)
+  customers: Customer[];
 }
