@@ -55,6 +55,18 @@ import { UpdateRoleUseCase } from "../usercases/role/update-role.usecase";
 import { RoleController } from "../controllers/role.controller";
 import { RoleRoutes } from "../routes/role.routes";
 import { GetAllUsersUseCase } from "../usercases/user/getAll-user.usecase";
+import { CustomerRepositoryInterface } from "../domain/repositories/customer.repository.interface";
+import { CustomerRepositoryImpl } from "../repositories/customer.repository";
+import { CustomerServiceInterface } from "../interfaces/customer.service.interface";
+import { CustomerServiceImpl } from "../services/customer.service";
+import { CreateCustomerUseCase } from "../usercases/customer/create-customer.usecase";
+import { GetCustomerUseCase } from "../usercases/customer/get-customer.usecase";
+import { GetAllCustomersUseCase } from "../usercases/customer/getall-customers.usecase";
+import { DeleteCustomerUseCase } from "../usercases/customer/delete-customer.usecase";
+import { UpdateCustomerUseCase } from "../usercases/customer/update-customer.usecase";
+import { GetCustomerByUserIdUseCase } from "../usercases/customer/get-customer-by-userid.usecase";
+import { CustomerController } from "../controllers/customer.controller";
+import { CustomerRoutes } from "../routes/customer.routes";
 
 const container = new Container();
 
@@ -79,6 +91,10 @@ container
   .bind<RoleRepositoryInterface>(TYPES.RoleRepository)
   .to(RoleRepositoryImpl)
   .inSingletonScope();
+container
+  .bind<CustomerRepositoryInterface>(TYPES.CustomerRepository)
+  .to(CustomerRepositoryImpl)
+  .inSingletonScope();
 
 // Services
 container.bind<UserServiceInterface>(TYPES.UserService).to(UserServiceImpl);
@@ -92,6 +108,9 @@ container
   .bind<ActivityServiceInterface>(TYPES.ActivityService)
   .to(ActivityServiceImpl);
 container.bind<RoleServiceInterface>(TYPES.RoleService).to(RoleServiceImpl);
+container
+  .bind<CustomerServiceInterface>(TYPES.CustomerService)
+  .to(CustomerServiceImpl);
 
 // Use Cases
 container
@@ -170,6 +189,25 @@ container
   .bind<UpdateRoleUseCase>(TYPES.UpdateRoleUseCase)
   .to(UpdateRoleUseCase);
 
+container
+  .bind<CreateCustomerUseCase>(TYPES.CreateCustomerUseCase)
+  .to(CreateCustomerUseCase);
+container
+  .bind<GetCustomerUseCase>(TYPES.GetCustomerUseCase)
+  .to(GetCustomerUseCase);
+container
+  .bind<GetAllCustomersUseCase>(TYPES.GetAllCustomersUseCase)
+  .to(GetAllCustomersUseCase);
+container
+  .bind<DeleteCustomerUseCase>(TYPES.DeleteCustomerUseCase)
+  .to(DeleteCustomerUseCase);
+container
+  .bind<UpdateCustomerUseCase>(TYPES.UpdateCustomerUseCase)
+  .to(UpdateCustomerUseCase);
+container
+  .bind<GetCustomerByUserIdUseCase>(TYPES.GetCustomerByUserIdUseCase)
+  .to(GetCustomerByUserIdUseCase);
+
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);
 container
@@ -182,6 +220,9 @@ container
   .bind<ActivityController>(TYPES.ActivityController)
   .to(ActivityController);
 container.bind<RoleController>(TYPES.RoleController).to(RoleController);
+container
+  .bind<CustomerController>(TYPES.CustomerController)
+  .to(CustomerController);
 
 // Routes
 container.bind<UserRoutes>(TYPES.UserRoutes).to(UserRoutes);
@@ -189,5 +230,6 @@ container.bind<CategoryRoutes>(TYPES.CategoryRoutes).to(CategoryRoutes);
 container.bind<InventoryRoutes>(TYPES.InventoryRoutes).to(InventoryRoutes);
 container.bind<ActivityRoutes>(TYPES.ActivityRoutes).to(ActivityRoutes);
 container.bind<RoleRoutes>(TYPES.RoleRoutes).to(RoleRoutes);
+container.bind<CustomerRoutes>(TYPES.CustomerRoutes).to(CustomerRoutes);
 
 export { container };
