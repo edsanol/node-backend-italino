@@ -3,11 +3,13 @@ import { CreateUserUseCase } from "../usercases/user/create-user.usecase";
 import { GetUserUseCase } from "../usercases/user/get-user.usecase";
 import { UpdateUserUseCase } from "../usercases/user/update-user.usecase";
 import { DeleteUserUseCase } from "../usercases/user/delete-user.usecase";
-import { User } from "../domain/models/user.model";
 import { injectable, inject } from "inversify";
 import { TYPES } from "../config/types";
 import { IUserDto } from "../dto/userDto";
 import { GetAllUsersUseCase } from "../usercases/user/getAll-user.usecase";
+import { LoginUserUseCase } from "../usercases/user/login-user.usecase";
+import { generateToken } from "../utils/jwt";
+import { RequestToToken } from "../interfaces/token.interface";
 
 @injectable()
 export class UserController {
@@ -21,8 +23,79 @@ export class UserController {
     @inject(TYPES.DeleteUserUseCase)
     private deleteUserUseCase: DeleteUserUseCase,
     @inject(TYPES.GetAllUsersUseCase)
-    private getAllUsersUseCase: GetAllUsersUseCase
+    private getAllUsersUseCase: GetAllUsersUseCase,
+    @inject(TYPES.LoginUserUseCase)
+    private loginUserUseCase: LoginUserUseCase
   ) {}
+
+  async loginUser(req: Request, res: Response): Promise<void> {
+    try {
+      const { email, password } = req.body;
+      const user = await this.loginUserUseCase.execute(email, password);
+      if (user) {
+        const token = await generateToken(user.id_user, user.rol.id_role);
+
+        res.status(200).json({
+          success: true,
+          message: "User logged in",
+          data: user,
+          token,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+          error: "User not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error logging in user ${error.message}`,
+      });
+    }
+  }
+
+  async revalidateToken(req: RequestToToken, res: Response): Promise<void> {
+    try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const user = await this.getUserUseCase.execute(userId);
+      if (user) {
+        const token = await generateToken(userId, roleId);
+
+        res.status(200).json({
+          success: true,
+          message: "Token revalidated",
+          data: user,
+          token,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+          error: "User not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error revalidating token ${error.message}`,
+      });
+    }
+  }
 
   async createUser(req: Request, res: Response): Promise<void> {
     try {
