@@ -5,6 +5,7 @@ import { Repository } from "typeorm";
 import { injectable } from "inversify";
 import { IUserDto } from "../dto/userDto";
 import { Role } from "../domain/models/role.model";
+import bcrypt from "bcrypt";
 
 @injectable()
 export class UserRepositoryImpl implements UserRepositoryInterface {
@@ -15,6 +16,27 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
     this.db = AppDataSource.getRepository(User);
     this.dbRole = AppDataSource.getRepository(Role);
   }
+
+  async loginUser(email: string, password: string): Promise<User | null> {
+    const userByEmail = await this.db
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.rol", "rol")
+      .where("user.email_user = :email_user", { email_user: email })
+      .getOne();
+
+    if (!userByEmail) {
+      return null;
+    }
+
+    const isMatch = await bcrypt.compare(password, userByEmail.password_user);
+
+    if (!isMatch) {
+      return null;
+    }
+
+    return userByEmail;
+  }
+
   async getAllUsers(): Promise<User[] | null> {
     const allUsers = await this.db
       .createQueryBuilder("user")
@@ -31,10 +53,13 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
   async createUser(user: IUserDto): Promise<User | null> {
     const role = await this.dbRole.findOneByOrFail({ id_role: user.roleId });
 
+    // Encrypta la contraseña
+    const encryptPassword = await bcrypt.hash(user.passwordUser, 8);
+
     const newUser = new User();
     newUser.name_user = user.nameUser;
     newUser.phone_user = user.phoneUser;
-    newUser.password_user = user.passwordUser;
+    newUser.password_user = encryptPassword;
     newUser.status_user = user.statusUser;
     newUser.email_user = user.emailUser;
     newUser.created_at = new Date();

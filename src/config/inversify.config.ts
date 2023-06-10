@@ -55,6 +55,7 @@ import { UpdateRoleUseCase } from "../usercases/role/update-role.usecase";
 import { RoleController } from "../controllers/role.controller";
 import { RoleRoutes } from "../routes/role.routes";
 import { GetAllUsersUseCase } from "../usercases/user/getAll-user.usecase";
+import { LoginUserUseCase } from "../usercases/user/login-user.usecase";
 import { CustomerRepositoryInterface } from "../domain/repositories/customer.repository.interface";
 import { CustomerRepositoryImpl } from "../repositories/customer.repository";
 import { CustomerServiceInterface } from "../interfaces/customer.service.interface";
@@ -126,6 +127,7 @@ container
 container
   .bind<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase)
   .to(GetAllUsersUseCase);
+container.bind<LoginUserUseCase>(TYPES.LoginUserUseCase).to(LoginUserUseCase);
 
 container
   .bind<CreateCategoryUseCase>(TYPES.CreateCategoryUseCase)

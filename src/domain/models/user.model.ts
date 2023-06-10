@@ -4,8 +4,8 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
   ManyToOne,
+  OneToMany,
 } from "typeorm";
 import { Role } from "./role.model";
 import { Customer } from "./customer.model";
@@ -15,16 +15,16 @@ export class User {
   @PrimaryGeneratedColumn()
   id_user: number;
 
-  @Column({ length: 220 })
+  @Column({ length: 220, unique: true })
   name_user: string;
 
   @Column({ length: 20 })
   phone_user: string;
 
-  @Column({ length: 180 })
+  @Column({ length: 180, unique: true })
   email_user: string;
 
-  @Column({ length: 30 })
+  @Column({ length: 300 })
   password_user: string;
 
   @Column({ length: 20 })

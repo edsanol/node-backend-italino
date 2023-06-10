@@ -32,7 +32,7 @@ export class CustomerRoutes {
       this.customerController.deleteCustomer.bind(this.customerController)
     );
     router.get(
-      "/customers/:userId",
+      "/customersBySaller/:userId",
       this.customerController.getCustomerByUserId.bind(this.customerController)
     );
   }
