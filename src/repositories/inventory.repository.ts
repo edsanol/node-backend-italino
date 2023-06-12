@@ -56,17 +56,8 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
 
     return inventoryById;
   }
-  async updateInventory(
-    idInventory: number,
-    inventory: Inventory
-  ): Promise<boolean> {
-    const inventoryToUpdate = this.db.findOneBy({ id_inventory: idInventory });
-
-    if (!inventoryToUpdate) {
-      return false;
-    }
-
-    await this.db.manager.save({ ...inventoryToUpdate, ...inventory });
+  async updateInventory(inventory: Inventory): Promise<boolean> {
+    await this.db.manager.save(inventory);
 
     return Promise.resolve(true);
   }

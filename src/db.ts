@@ -5,6 +5,8 @@ import { Inventory } from "./domain/models/inventory.model";
 import { Role } from "./domain/models/role.model";
 import { Activity } from "./domain/models/activity.model";
 import { Customer } from "./domain/models/customer.model";
+import { Order } from "./domain/models/order.model";
+import { OrderDetail } from "./domain/models/order-detail.model";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -13,7 +15,16 @@ export const AppDataSource = new DataSource({
   username: "root",
   password: "password",
   database: "italinodb",
-  entities: [Customer, User, Category, Role, Inventory, Activity],
+  entities: [
+    Customer,
+    User,
+    Category,
+    Role,
+    Inventory,
+    Activity,
+    Order,
+    OrderDetail,
+  ],
   logging: true,
   synchronize: true,
 });

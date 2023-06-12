@@ -9,6 +9,8 @@ import {
 } from "typeorm";
 import { Role } from "./role.model";
 import { Customer } from "./customer.model";
+import { Order } from "./order.model";
+import { OrderDetail } from "./order-detail.model";
 
 @Entity()
 export class User {
@@ -41,4 +43,7 @@ export class User {
 
   @OneToMany(() => Customer, (customer) => customer.user)
   customers: Customer[];
+
+  @OneToMany(() => Order, (order) => order.user)
+  orders: Order[];
 }
