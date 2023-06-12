@@ -24,7 +24,7 @@ export class InventoryRoutes {
       this.inventoryController.getInventory.bind(this.inventoryController)
     );
     router.put(
-      "/inventories/:inventoryId",
+      "/inventories",
       this.inventoryController.updateInventory.bind(this.inventoryController)
     );
     router.delete(

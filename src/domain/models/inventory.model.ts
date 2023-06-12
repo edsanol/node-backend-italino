@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Category } from "./category.model";
+import { OrderDetail } from "./order-detail.model";
 
 @Entity()
 export class Inventory {
@@ -50,4 +52,7 @@ export class Inventory {
   @ManyToOne(() => Category, (category) => category.inventory)
   @JoinColumn({ name: "id_category" })
   category: Category;
+
+  @OneToMany(() => OrderDetail, (order_detail) => order_detail.inventory)
+  order_details: OrderDetail[];
 }

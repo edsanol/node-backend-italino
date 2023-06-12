@@ -10,11 +10,8 @@ export class UpdateInventoryUseCase {
     private inventoryService: InventoryServiceInterface
   ) {}
 
-  async execute(idInventory: number, inventory: Inventory): Promise<boolean> {
-    const isUpdated = await this.inventoryService.updateInventory(
-      idInventory,
-      inventory
-    );
+  async execute(inventory: Inventory): Promise<boolean> {
+    const isUpdated = await this.inventoryService.updateInventory(inventory);
     return isUpdated;
   }
 }

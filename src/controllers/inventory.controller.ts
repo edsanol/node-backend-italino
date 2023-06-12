@@ -87,12 +87,8 @@ export class InventoryController {
 
   async updateInventory(req: Request, res: Response): Promise<void> {
     try {
-      const inventoryId: number = Number(req.params.inventoryId);
       const data: Inventory = req.body;
-      const isUpdated = await this.updateInventoryUseCase.execute(
-        inventoryId,
-        data
-      );
+      const isUpdated = await this.updateInventoryUseCase.execute(data);
       if (isUpdated) {
         res.status(200).json({
           success: true,

@@ -3,10 +3,12 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { User } from "./user.model";
+import { Order } from "./order.model";
 
 @Entity()
 export class Customer {
@@ -36,4 +38,7 @@ export class Customer {
 
   @ManyToOne(() => User, (user) => user.customers)
   user: User;
+
+  @OneToMany(() => Order, (order) => order.customer)
+  orders: Order[];
 }

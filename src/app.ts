@@ -9,6 +9,7 @@ import { InventoryRoutes } from "./routes/inventory.routes";
 import { ActivityRoutes } from "./routes/activity.routes";
 import { RoleRoutes } from "./routes/role.routes";
 import { CustomerRoutes } from "./routes/customer.routes";
+import { OrderRoutes } from "./routes/order.routes";
 
 const app = express();
 
@@ -35,6 +36,9 @@ roleRoutes.configureRoutes(app);
 
 const customerRoutes = container.resolve<CustomerRoutes>(CustomerRoutes);
 customerRoutes.configureRoutes(app);
+
+const orderRoutes = container.resolve<OrderRoutes>(OrderRoutes);
+orderRoutes.configureRoutes(app);
 
 // Configuración de Swagger
 swaggerDocs(app, 3000);

@@ -68,6 +68,15 @@ import { UpdateCustomerUseCase } from "../usercases/customer/update-customer.use
 import { GetCustomerByUserIdUseCase } from "../usercases/customer/get-customer-by-userid.usecase";
 import { CustomerController } from "../controllers/customer.controller";
 import { CustomerRoutes } from "../routes/customer.routes";
+import { OrderRepositoryInterface } from "../domain/repositories/order.repository.interface";
+import { OrderRepositoryImpl } from "../repositories/order.repository";
+import { OrderDetailRepositoryInterface } from "../domain/repositories/order-detail.repository.interface";
+import { OrderDetailRepositoryImpl } from "../repositories/order-detail.repository";
+import { OrderServiceInterface } from "../interfaces/order.service.interface";
+import { OrderServiceImpl } from "../services/order.service";
+import { CreateOrderUseCase } from "../usercases/order/create-order.usecase";
+import { OrderController } from "../controllers/order.controller";
+import { OrderRoutes } from "../routes/order.routes";
 
 const container = new Container();
 
@@ -96,6 +105,14 @@ container
   .bind<CustomerRepositoryInterface>(TYPES.CustomerRepository)
   .to(CustomerRepositoryImpl)
   .inSingletonScope();
+container
+  .bind<OrderRepositoryInterface>(TYPES.OrderRepository)
+  .to(OrderRepositoryImpl)
+  .inSingletonScope();
+container
+  .bind<OrderDetailRepositoryInterface>(TYPES.OrderDetailRepository)
+  .to(OrderDetailRepositoryImpl)
+  .inSingletonScope();
 
 // Services
 container.bind<UserServiceInterface>(TYPES.UserService).to(UserServiceImpl);
@@ -112,6 +129,7 @@ container.bind<RoleServiceInterface>(TYPES.RoleService).to(RoleServiceImpl);
 container
   .bind<CustomerServiceInterface>(TYPES.CustomerService)
   .to(CustomerServiceImpl);
+container.bind<OrderServiceInterface>(TYPES.OrderService).to(OrderServiceImpl);
 
 // Use Cases
 container
@@ -210,6 +228,10 @@ container
   .bind<GetCustomerByUserIdUseCase>(TYPES.GetCustomerByUserIdUseCase)
   .to(GetCustomerByUserIdUseCase);
 
+container
+  .bind<CreateOrderUseCase>(TYPES.CreateOrderUseCase)
+  .to(CreateOrderUseCase);
+
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);
 container
@@ -225,6 +247,7 @@ container.bind<RoleController>(TYPES.RoleController).to(RoleController);
 container
   .bind<CustomerController>(TYPES.CustomerController)
   .to(CustomerController);
+container.bind<OrderController>(TYPES.OrderController).to(OrderController);
 
 // Routes
 container.bind<UserRoutes>(TYPES.UserRoutes).to(UserRoutes);
@@ -233,5 +256,6 @@ container.bind<InventoryRoutes>(TYPES.InventoryRoutes).to(InventoryRoutes);
 container.bind<ActivityRoutes>(TYPES.ActivityRoutes).to(ActivityRoutes);
 container.bind<RoleRoutes>(TYPES.RoleRoutes).to(RoleRoutes);
 container.bind<CustomerRoutes>(TYPES.CustomerRoutes).to(CustomerRoutes);
+container.bind<OrderRoutes>(TYPES.OrderRoutes).to(OrderRoutes);
 
 export { container };

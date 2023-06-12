@@ -27,14 +27,8 @@ export class InventoryServiceImpl implements InventoryServiceInterface {
     );
     return inventoryById;
   }
-  async updateInventory(
-    idInventory: number,
-    inventory: Inventory
-  ): Promise<boolean> {
-    const isUpdated = await this.inventoryRepository.updateInventory(
-      idInventory,
-      inventory
-    );
+  async updateInventory(inventory: Inventory): Promise<boolean> {
+    const isUpdated = await this.inventoryRepository.updateInventory(inventory);
     return isUpdated;
   }
   deleteInventory(idInventory: number): Promise<boolean> {
