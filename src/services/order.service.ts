@@ -70,9 +70,9 @@ export class OrderServiceImpl implements OrderServiceInterface {
     const newOrder = new Order();
     newOrder.customer = customer;
     newOrder.user = user;
-    newOrder.status_order = "Pending";
-    newOrder.payment_order = "Unpaid";
-    newOrder.type_order = "Sale";
+    newOrder.status_order = order.statusOrder;
+    newOrder.payment_order = order.paymentOrder;
+    newOrder.type_order = order.typeOrder;
     newOrder.total_order = totalOrder;
     newOrder.created_at = new Date();
     newOrder.updated_at = new Date();
@@ -117,10 +117,27 @@ export class OrderServiceImpl implements OrderServiceInterface {
 
     return returnOrder;
   }
-  updateOrder(order: Order): Promise<Order> {
-    throw new Error("Method not implemented.");
+  async getAllOrders(): Promise<Order[]> {
+    const orders = await this.orderRepository.getAllOrders();
+    return orders;
   }
-  getOrderById(id: number): Promise<Order | null> {
-    throw new Error("Method not implemented.");
+  async updateOrder(order: IOrderDto): Promise<Order> {
+    const newOrder = new Order();
+    newOrder.id_order = order.idOrder!;
+    newOrder.status_order = order.statusOrder;
+    newOrder.payment_order = order.paymentOrder;
+    newOrder.type_order = order.typeOrder;
+    newOrder.total_order = order.totalOrder;
+    newOrder.updated_at = new Date();
+    const updatedOrder = await this.orderRepository.updateOrder(newOrder);
+    return updatedOrder;
+  }
+  async getOrderById(id: number): Promise<Order | null> {
+    const order = await this.orderRepository.getOrderById(id);
+    return order;
+  }
+  async getOrdersByUserId(userId: number): Promise<Order[]> {
+    const orders = await this.orderRepository.getOrdersByUserId(userId);
+    return orders;
   }
 }

@@ -77,6 +77,10 @@ import { OrderServiceImpl } from "../services/order.service";
 import { CreateOrderUseCase } from "../usercases/order/create-order.usecase";
 import { OrderController } from "../controllers/order.controller";
 import { OrderRoutes } from "../routes/order.routes";
+import { GetAllOrdersUseCase } from "../usercases/order/getAll-orders.usecase";
+import { GetAllOrdersByUserIdUseCase } from "../usercases/order/getByUserId-order.usecase";
+import { GetOrderByIdUseCase } from "../usercases/order/getById-order.usecase";
+import { UpdateOrderUseCase } from "../usercases/order/update-order.usecase";
 
 const container = new Container();
 
@@ -231,6 +235,18 @@ container
 container
   .bind<CreateOrderUseCase>(TYPES.CreateOrderUseCase)
   .to(CreateOrderUseCase);
+container
+  .bind<GetAllOrdersUseCase>(TYPES.GetAllOrdersUseCase)
+  .to(GetAllOrdersUseCase);
+container
+  .bind<GetAllOrdersByUserIdUseCase>(TYPES.GetAllOrdersByUserIdUseCase)
+  .to(GetAllOrdersByUserIdUseCase);
+container
+  .bind<GetOrderByIdUseCase>(TYPES.GetOrderByIdUseCase)
+  .to(GetOrderByIdUseCase);
+container
+  .bind<UpdateOrderUseCase>(TYPES.UpdateOrderUseCase)
+  .to(UpdateOrderUseCase);
 
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);

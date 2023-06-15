@@ -55,6 +55,10 @@ const TYPES = {
   GetCustomerByUserIdUseCase: Symbol.for("GetCustomerByUserIdUseCase"),
 
   CreateOrderUseCase: Symbol.for("CreateOrderUseCase"),
+  GetAllOrdersUseCase: Symbol.for("GetAllOrdersUseCase"),
+  GetAllOrdersByUserIdUseCase: Symbol.for("GetAllOrdersByUserIdUseCase"),
+  GetOrderByIdUseCase: Symbol.for("GetOrderByIdUseCase"),
+  UpdateOrderUseCase: Symbol.for("UpdateOrderUseCase"),
 
   UserController: Symbol.for("UserController"),
   CategoryController: Symbol.for("CategoryController"),
