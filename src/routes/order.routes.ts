@@ -15,5 +15,17 @@ export class OrderRoutes {
       "/order",
       this.orderController.createOrder.bind(this.orderController)
     );
+    router.get(
+      "/order",
+      this.orderController.getAllOrders.bind(this.orderController)
+    );
+    router.get(
+      "/order/byUser/:id",
+      this.orderController.getAllOrdersByUserId.bind(this.orderController)
+    );
+    router.get(
+      "/order/:id",
+      this.orderController.getOrderById.bind(this.orderController)
+    );
   }
 }

@@ -37,7 +37,10 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     return this.db.manager.save(newInventory);
   }
   async getAllInventories(): Promise<Inventory[] | null> {
-    const allInventories = await this.db.find();
+    const allInventories = await this.db
+      .createQueryBuilder("inventory")
+      .leftJoinAndSelect("inventory.category", "category")
+      .getMany();
 
     if (!allInventories) {
       return null;

@@ -11,6 +11,37 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
   constructor() {
     this.db = AppDataSource.getRepository(Order);
   }
+  async getAllOrders(): Promise<Order[]> {
+    const orders = await this.db
+      .createQueryBuilder("order")
+      .leftJoinAndSelect("order.user", "user")
+      .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_details", "order_details")
+      .leftJoinAndSelect("order_details.inventory", "inventory")
+      .getMany();
+
+    orders.forEach((order) => {
+      order.user.password_user = "";
+    });
+
+    return orders;
+  }
+  async getOrdersByUserId(userId: number): Promise<Order[]> {
+    const orders = await this.db
+      .createQueryBuilder("order")
+      .leftJoinAndSelect("order.user", "user")
+      .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_details", "order_details")
+      .leftJoinAndSelect("order_details.inventory", "inventory")
+      .where("order.user.id_user = :userId", { userId })
+      .getMany();
+
+    orders.forEach((order) => {
+      order.user.password_user = "";
+    });
+
+    return orders;
+  }
 
   async createOrder(order: Order): Promise<Order> {
     return await this.db.manager.save(order);
@@ -19,6 +50,19 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
     return await this.db.manager.save(order);
   }
   async getOrderById(id: number): Promise<Order | null> {
-    return await this.db.findOneByOrFail({ id_order: id });
+    const order = await this.db
+      .createQueryBuilder("order")
+      .leftJoinAndSelect("order.user", "user")
+      .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_details", "order_details")
+      .leftJoinAndSelect("order_details.inventory", "inventory")
+      .where("order.id_order = :id", { id })
+      .getOne();
+
+    if (order) {
+      order.user.password_user = "";
+    }
+
+    return order;
   }
 }
