@@ -10,7 +10,7 @@ import {
 import { Role } from "./role.model";
 import { Customer } from "./customer.model";
 import { Order } from "./order.model";
-import { OrderDetail } from "./order-detail.model";
+import { AddInventory } from "./add-inventory.model";
 
 @Entity()
 export class User {
@@ -46,4 +46,7 @@ export class User {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(() => AddInventory, (add_inventory) => add_inventory.user)
+  add_inventory: AddInventory[];
 }

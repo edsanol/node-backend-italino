@@ -1,7 +1,8 @@
 import { IOrderDetailDto } from "./orderDetailDto";
+import { IOrderReturnDto } from "./orderReturnDto";
 
 export interface IOrderDto {
-  idOrder?: number;
+  id?: number;
   customerId: number;
   userId: number;
   statusOrder: string;
@@ -11,4 +12,5 @@ export interface IOrderDto {
   createdAt?: Date;
   updatedAt?: Date;
   orderDetails: IOrderDetailDto[];
+  OrderReturns?: IOrderReturnDto[];
 }

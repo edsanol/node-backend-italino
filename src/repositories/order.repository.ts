@@ -11,11 +11,17 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
   constructor() {
     this.db = AppDataSource.getRepository(Order);
   }
+
+  async createOrderReturns(order: Order): Promise<Order> {
+    return await this.db.save(order);
+  }
+
   async getAllOrders(): Promise<Order[]> {
     const orders = await this.db
       .createQueryBuilder("order")
       .leftJoinAndSelect("order.user", "user")
       .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_returns", "order_returns")
       .leftJoinAndSelect("order.order_details", "order_details")
       .leftJoinAndSelect("order_details.inventory", "inventory")
       .getMany();
@@ -31,6 +37,7 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
       .createQueryBuilder("order")
       .leftJoinAndSelect("order.user", "user")
       .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_returns", "order_returns")
       .leftJoinAndSelect("order.order_details", "order_details")
       .leftJoinAndSelect("order_details.inventory", "inventory")
       .where("order.user.id_user = :userId", { userId })
@@ -54,6 +61,7 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
       .createQueryBuilder("order")
       .leftJoinAndSelect("order.user", "user")
       .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_returns", "order_returns")
       .leftJoinAndSelect("order.order_details", "order_details")
       .leftJoinAndSelect("order_details.inventory", "inventory")
       .where("order.id_order = :id", { id })

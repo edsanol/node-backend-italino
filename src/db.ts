@@ -7,6 +7,8 @@ import { Activity } from "./domain/models/activity.model";
 import { Customer } from "./domain/models/customer.model";
 import { Order } from "./domain/models/order.model";
 import { OrderDetail } from "./domain/models/order-detail.model";
+import { OrderReturn } from "./domain/models/order-return.model";
+import { AddInventory } from "./domain/models/add-inventory.model";
 
 export const AppDataSource = new DataSource({
   type: "mysql",
@@ -24,6 +26,8 @@ export const AppDataSource = new DataSource({
     Activity,
     Order,
     OrderDetail,
+    OrderReturn,
+    AddInventory,
   ],
   logging: true,
   synchronize: true,

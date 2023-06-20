@@ -31,5 +31,9 @@ export class InventoryRoutes {
       "/inventories/:inventoryId",
       this.inventoryController.deleteInventory.bind(this.inventoryController)
     );
+    router.post(
+      "/inventories/add",
+      this.inventoryController.addInventory.bind(this.inventoryController)
+    );
   }
 }

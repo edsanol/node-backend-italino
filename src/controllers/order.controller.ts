@@ -7,6 +7,7 @@ import { GetAllOrdersUseCase } from "../usercases/order/getAll-orders.usecase";
 import { GetAllOrdersByUserIdUseCase } from "../usercases/order/getByUserId-order.usecase";
 import { GetOrderByIdUseCase } from "../usercases/order/getById-order.usecase";
 import { UpdateOrderUseCase } from "../usercases/order/update-order.usecase";
+import { CreateReturnOrderUseCase } from "../usercases/order/create-return.usecase";
 
 @injectable()
 export class OrderController {
@@ -20,7 +21,9 @@ export class OrderController {
     @inject(TYPES.GetOrderByIdUseCase)
     private readonly getOrderByIdUseCase: GetOrderByIdUseCase,
     @inject(TYPES.UpdateOrderUseCase)
-    private readonly updateOrderUseCase: UpdateOrderUseCase
+    private readonly updateOrderUseCase: UpdateOrderUseCase,
+    @inject(TYPES.CreateReturnOrderUseCase)
+    private readonly createReturnOrderUseCase: CreateReturnOrderUseCase
   ) {}
 
   async createOrder(req: Request, res: Response) {
@@ -108,6 +111,24 @@ export class OrderController {
         success: false,
         message: error.message,
         error: `Error updating order ${error.message}`,
+      });
+    }
+  }
+
+  async createReturnOrder(req: Request, res: Response) {
+    try {
+      const order: IOrderDto = req.body;
+      const newOrder = await this.createReturnOrderUseCase.execute(order);
+      res.status(201).json({
+        success: true,
+        message: "Order created successfully",
+        data: newOrder,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error creating order",
+        error: `Error creating order ${error.message}`,
       });
     }
   }

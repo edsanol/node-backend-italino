@@ -10,6 +10,7 @@ import {
 import { Customer } from "./customer.model";
 import { User } from "./user.model";
 import { OrderDetail } from "./order-detail.model";
+import { OrderReturn } from "./order-return.model";
 
 @Entity()
 export class Order {
@@ -42,4 +43,7 @@ export class Order {
 
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.order)
   order_details: OrderDetail[];
+
+  @OneToMany(() => OrderReturn, (orderReturns) => orderReturns.order)
+  order_returns: OrderReturn[];
 }
