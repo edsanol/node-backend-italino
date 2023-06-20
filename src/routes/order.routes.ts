@@ -27,5 +27,13 @@ export class OrderRoutes {
       "/order/:id",
       this.orderController.getOrderById.bind(this.orderController)
     );
+    router.put(
+      "/order",
+      this.orderController.updateOrder.bind(this.orderController)
+    );
+    router.post(
+      "/order/return",
+      this.orderController.createReturnOrder.bind(this.orderController)
+    );
   }
 }

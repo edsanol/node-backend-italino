@@ -7,6 +7,7 @@ const TYPES = {
   CustomerRepository: Symbol.for("CustomerRepository"),
   OrderRepository: Symbol.for("OrderRepository"),
   OrderDetailRepository: Symbol.for("OrderDetailRepository"),
+  OrderReturnRepository: Symbol.for("OrderReturnRepository"),
 
   UserService: Symbol.for("UserService"),
   CategoryService: Symbol.for("CategoryService"),
@@ -59,6 +60,7 @@ const TYPES = {
   GetAllOrdersByUserIdUseCase: Symbol.for("GetAllOrdersByUserIdUseCase"),
   GetOrderByIdUseCase: Symbol.for("GetOrderByIdUseCase"),
   UpdateOrderUseCase: Symbol.for("UpdateOrderUseCase"),
+  CreateReturnOrderUseCase: Symbol.for("CreateReturnOrderUseCase"),
 
   UserController: Symbol.for("UserController"),
   CategoryController: Symbol.for("CategoryController"),

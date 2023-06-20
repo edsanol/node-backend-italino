@@ -3,6 +3,7 @@ import { IOrderDto } from "../dto/orderDto";
 
 export interface OrderServiceInterface {
   createOrder(order: IOrderDto): Promise<Order>;
+  createOrderReturns(order: IOrderDto): Promise<Order>;
   updateOrder(order: IOrderDto): Promise<Order>;
   getOrderById(id: number): Promise<Order | null>;
   getOrderById(id: number): Promise<Order | null>;

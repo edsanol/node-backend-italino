@@ -81,6 +81,9 @@ import { GetAllOrdersUseCase } from "../usercases/order/getAll-orders.usecase";
 import { GetAllOrdersByUserIdUseCase } from "../usercases/order/getByUserId-order.usecase";
 import { GetOrderByIdUseCase } from "../usercases/order/getById-order.usecase";
 import { UpdateOrderUseCase } from "../usercases/order/update-order.usecase";
+import { CreateReturnOrderUseCase } from "../usercases/order/create-return.usecase";
+import { OrderReturnRepositoryInterface } from "../domain/repositories/order-return.respository.interface";
+import { OrderReturnRepositoryImpl } from "../repositories/order-return.repository";
 
 const container = new Container();
 
@@ -116,6 +119,10 @@ container
 container
   .bind<OrderDetailRepositoryInterface>(TYPES.OrderDetailRepository)
   .to(OrderDetailRepositoryImpl)
+  .inSingletonScope();
+container
+  .bind<OrderReturnRepositoryInterface>(TYPES.OrderReturnRepository)
+  .to(OrderReturnRepositoryImpl)
   .inSingletonScope();
 
 // Services
@@ -247,6 +254,9 @@ container
 container
   .bind<UpdateOrderUseCase>(TYPES.UpdateOrderUseCase)
   .to(UpdateOrderUseCase);
+container
+  .bind<CreateReturnOrderUseCase>(TYPES.CreateReturnOrderUseCase)
+  .to(CreateReturnOrderUseCase);
 
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);

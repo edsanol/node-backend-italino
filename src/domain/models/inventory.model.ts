@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { Category } from "./category.model";
 import { OrderDetail } from "./order-detail.model";
+import { OrderReturn } from "./order-return.model";
 
 @Entity()
 export class Inventory {
@@ -55,4 +56,7 @@ export class Inventory {
 
   @OneToMany(() => OrderDetail, (order_detail) => order_detail.inventory)
   order_details: OrderDetail[];
+
+  @OneToMany(() => OrderReturn, (order_returns) => order_returns.inventory)
+  order_returns: OrderReturn[];
 }
