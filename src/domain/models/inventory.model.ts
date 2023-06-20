@@ -11,6 +11,7 @@ import {
 import { Category } from "./category.model";
 import { OrderDetail } from "./order-detail.model";
 import { OrderReturn } from "./order-return.model";
+import { AddInventory } from "./add-inventory.model";
 
 @Entity()
 export class Inventory {
@@ -59,4 +60,7 @@ export class Inventory {
 
   @OneToMany(() => OrderReturn, (order_returns) => order_returns.inventory)
   order_returns: OrderReturn[];
+
+  @OneToMany(() => AddInventory, (add_inventory) => add_inventory.inventory)
+  add_inventory: AddInventory[];
 }

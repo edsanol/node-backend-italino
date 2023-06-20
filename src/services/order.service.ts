@@ -144,7 +144,15 @@ export class OrderServiceImpl implements OrderServiceInterface {
       })
     );
 
-    return orderUpdated;
+    const orderToReturn = await this.orderRepository.getOrderById(
+      existingOrder.id_order
+    );
+
+    if (!orderToReturn) {
+      throw new Error("Order not found");
+    }
+
+    return orderToReturn;
   }
 
   async createOrder(order: IOrderDto): Promise<Order> {

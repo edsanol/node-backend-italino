@@ -5,16 +5,26 @@ import { Category } from "../domain/models/category.model";
 import { AppDataSource } from "../db";
 import { Repository } from "typeorm";
 import { IInventoryDto } from "../dto/inventoryDto";
+import { IAddInventoryDto } from "dto/addInventoryDto";
+import { AddInventory } from "../domain/models/add-inventory.model";
+import { User } from "../domain/models/user.model";
 
 @injectable()
 export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
   private readonly db: Repository<Inventory>;
   private readonly dbCategory: Repository<Category>;
+  private readonly dbAddInventory: Repository<AddInventory>;
 
   constructor() {
     this.db = AppDataSource.getRepository(Inventory);
     this.dbCategory = AppDataSource.getRepository(Category);
+    this.dbAddInventory = AppDataSource.getRepository(AddInventory);
   }
+
+  async addInventory(adInventory: AddInventory): Promise<AddInventory> {
+    return this.dbAddInventory.save(adInventory);
+  }
+
   async createInventory(inventory: IInventoryDto): Promise<Inventory> {
     const category = await this.dbCategory.findOneByOrFail({
       id_category: inventory.categoryId,
@@ -40,6 +50,7 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     const allInventories = await this.db
       .createQueryBuilder("inventory")
       .leftJoinAndSelect("inventory.category", "category")
+      .leftJoinAndSelect("inventory.add_inventory", "add_inventory")
       .getMany();
 
     if (!allInventories) {
@@ -49,15 +60,18 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     return allInventories;
   }
   async getInventoryById(idInventory: number): Promise<Inventory | null> {
-    const inventoryById = await this.db.findOneBy({
-      id_inventory: idInventory,
-    });
+    const inventory = await this.db
+      .createQueryBuilder("inventory")
+      .leftJoinAndSelect("inventory.category", "category")
+      .leftJoinAndSelect("inventory.add_inventory", "add_inventory")
+      .where("inventory.id_inventory = :idInventory", { idInventory })
+      .getOne();
 
-    if (!inventoryById) {
+    if (!inventory) {
       return null;
     }
 
-    return inventoryById;
+    return inventory;
   }
   async updateInventory(inventory: Inventory): Promise<boolean> {
     await this.db.manager.save(inventory);

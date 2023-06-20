@@ -35,6 +35,7 @@ const TYPES = {
   DeleteInventoryUseCase: Symbol.for("DeleteInventoryUseCase"),
   GetInventoryUseCase: Symbol.for("GetInventoryUseCase"),
   UpdateInventoryUseCase: Symbol.for("UpdateInventoryUseCase"),
+  AddInventoryUseCase: Symbol.for("AddInventoryUseCase"),
 
   CreateActivityUseCase: Symbol.for("CreateActivityUseCase"),
   GetAllActivitiesUseCase: Symbol.for("GetAllActivitiesUseCase"),

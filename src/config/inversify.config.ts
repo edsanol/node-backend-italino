@@ -84,6 +84,7 @@ import { UpdateOrderUseCase } from "../usercases/order/update-order.usecase";
 import { CreateReturnOrderUseCase } from "../usercases/order/create-return.usecase";
 import { OrderReturnRepositoryInterface } from "../domain/repositories/order-return.respository.interface";
 import { OrderReturnRepositoryImpl } from "../repositories/order-return.repository";
+import { AddInventoryUseCase } from "../usercases/inventory/add-inventory.usecase";
 
 const container = new Container();
 
@@ -189,6 +190,9 @@ container
 container
   .bind<UpdateInventoryUseCase>(TYPES.UpdateInventoryUseCase)
   .to(UpdateInventoryUseCase);
+container
+  .bind<AddInventoryUseCase>(TYPES.AddInventoryUseCase)
+  .to(AddInventoryUseCase);
 
 container
   .bind<CreateActivityUseCase>(TYPES.CreateActivityUseCase)

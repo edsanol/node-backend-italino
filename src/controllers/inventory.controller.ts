@@ -8,6 +8,8 @@ import { DeleteInventoryUseCase } from "../usercases/inventory/delete-inventory.
 import { Request, Response } from "express";
 import { Inventory } from "../domain/models/inventory.model";
 import { IInventoryDto } from "../dto/inventoryDto";
+import { AddInventoryUseCase } from "../usercases/inventory/add-inventory.usecase";
+import { IAddInventoryDto } from "../dto/addInventoryDto";
 
 @injectable()
 export class InventoryController {
@@ -21,7 +23,9 @@ export class InventoryController {
     @inject(TYPES.UpdateInventoryUseCase)
     private updateInventoryUseCase: UpdateInventoryUseCase,
     @inject(TYPES.DeleteInventoryUseCase)
-    private deleteInventoryUseCase: DeleteInventoryUseCase
+    private deleteInventoryUseCase: DeleteInventoryUseCase,
+    @inject(TYPES.AddInventoryUseCase)
+    private addInventoryUseCase: AddInventoryUseCase
   ) {}
 
   async createInventory(req: Request, res: Response): Promise<void> {
@@ -132,6 +136,32 @@ export class InventoryController {
       res.status(500).json({
         success: false,
         message: "Error deleting inventory",
+        error: error.message,
+      });
+    }
+  }
+
+  async addInventory(req: Request, res: Response): Promise<void> {
+    try {
+      const request: IAddInventoryDto = req.body;
+      const isAdded = await this.addInventoryUseCase.execute(request);
+      if (isAdded) {
+        res.status(200).json({
+          success: true,
+          message: "Inventory added successfully",
+          data: true,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Inventory not found",
+          error: "Inventory not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error adding inventory",
         error: error.message,
       });
     }
