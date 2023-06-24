@@ -7,6 +7,7 @@ import { UpdateRoleUseCase } from "../usercases/role/update-role.usecase";
 import { DeleteRoleUseCase } from "../usercases/role/delete-role.usecase";
 import { IRoleDto } from "../dto/roleDto";
 import { Request, Response } from "express";
+import { RequestToToken } from "../interfaces/token.interface";
 
 @injectable()
 export class RoleController {
@@ -23,8 +24,20 @@ export class RoleController {
     private readonly deleteRoleUseCase: DeleteRoleUseCase
   ) {}
 
-  async createRole(req: Request, res: Response) {
+  async createRole(req: RequestToToken, res: Response) {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const role: IRoleDto = req.body;
       const newRole = await this.createRoleUseCase.execute(role);
       res.status(201).json({
@@ -41,8 +54,20 @@ export class RoleController {
     }
   }
 
-  async getAllRoles(req: Request, res: Response) {
+  async getAllRoles(req: RequestToToken, res: Response) {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const allRoles = await this.getAllRolesUseCase.execute();
       res.status(200).json({
         success: true,
@@ -58,8 +83,20 @@ export class RoleController {
     }
   }
 
-  async getRole(req: Request, res: Response) {
+  async getRole(req: RequestToToken, res: Response) {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const idRole = Number(req.params.idRole);
       const role = await this.getRoleUseCase.execute(idRole);
       res.status(200).json({
@@ -76,8 +113,20 @@ export class RoleController {
     }
   }
 
-  async updateRole(req: Request, res: Response) {
+  async updateRole(req: RequestToToken, res: Response) {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const idRole = Number(req.params.idRole);
       const role: IRoleDto = req.body;
       const roleUpdated = await this.updateRoleUseCase.execute(idRole, role);
@@ -95,8 +144,20 @@ export class RoleController {
     }
   }
 
-  async deleteRole(req: Request, res: Response) {
+  async deleteRole(req: RequestToToken, res: Response) {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const idRole = Number(req.params.idRole);
       const roleDeleted = await this.deleteRoleUseCase.execute(idRole);
       res.status(200).json({

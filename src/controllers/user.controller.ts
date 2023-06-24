@@ -97,8 +97,20 @@ export class UserController {
     }
   }
 
-  async createUser(req: Request, res: Response): Promise<void> {
+  async createUser(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const user: IUserDto = req.body;
       const newUser = await this.createUserUseCase.execute(user);
       res.status(201).json({
@@ -115,10 +127,22 @@ export class UserController {
     }
   }
 
-  async getUser(req: Request, res: Response): Promise<void> {
+  async getUser(req: RequestToToken, res: Response): Promise<void> {
     try {
-      const userId: number = Number(req.params.userId);
-      const user = await this.getUserUseCase.execute(userId);
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const userIdFromParams: number = Number(req.params.userId);
+      const user = await this.getUserUseCase.execute(userIdFromParams);
       if (user) {
         res.status(201).json({
           success: true,
@@ -141,8 +165,20 @@ export class UserController {
     }
   }
 
-  async getAllUsers(req: Request, res: Response): Promise<void> {
+  async getAllUsers(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const allUsers = await this.getAllUsersUseCase.execute();
       res.status(201).json({
         success: true,
@@ -158,11 +194,26 @@ export class UserController {
     }
   }
 
-  async updateUser(req: Request, res: Response): Promise<void> {
+  async updateUser(req: RequestToToken, res: Response): Promise<void> {
     try {
-      const userId: number = Number(req.params.userId);
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const userIdFromParams: number = Number(req.params.userId);
       const data: IUserDto = req.body;
-      const isUpdated = await this.updateUserUseCase.execute(userId, data);
+      const isUpdated = await this.updateUserUseCase.execute(
+        userIdFromParams,
+        data
+      );
       if (isUpdated) {
         res.status(200).json({
           success: true,
@@ -185,10 +236,22 @@ export class UserController {
     }
   }
 
-  async deleteUser(req: Request, res: Response): Promise<void> {
+  async deleteUser(req: RequestToToken, res: Response): Promise<void> {
     try {
-      const userId: number = Number(req.params.userId);
-      const isDeleted = await this.deleteUserUseCase.execute(userId);
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const userIdFromParams: number = Number(req.params.userId);
+      const isDeleted = await this.deleteUserUseCase.execute(userIdFromParams);
       if (isDeleted) {
         res.status(200).json({
           success: true,

@@ -6,6 +6,6 @@ export interface CustomerServiceInterface {
   getAllCustomers(): Promise<Customer[] | null>;
   getCustomerById(idCustomer: number): Promise<Customer | null>;
   getCustomerByUserId(idUser: number): Promise<Customer[] | null>;
-  updateCustomer(idCustomer: number, customer: ICustomerDto): Promise<boolean>;
+  updateCustomer(idCustomer: number, customer: ICustomerDto): Promise<Customer>;
   deleteCustomer(idCustomer: number): Promise<boolean>;
 }

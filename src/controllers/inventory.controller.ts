@@ -13,6 +13,7 @@ import { IAddInventoryDto } from "../dto/addInventoryDto";
 import { GetInventoryByIdAndAddUseCase } from "../usercases/inventory/get-inventory-add.usecase";
 import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get-inventory-by-name-or-reference.usecase";
 import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
+import { RequestToToken } from "../interfaces/token.interface";
 
 @injectable()
 export class InventoryController {
@@ -37,8 +38,20 @@ export class InventoryController {
     private updateInventoryFromAppUseCase: UpdateInventoryFromAppUseCase
   ) {}
 
-  async createInventory(req: Request, res: Response): Promise<void> {
+  async createInventory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const inventory: IInventoryDto = req.body;
       const newInventory = await this.createInventoryUseCase.execute(inventory);
       res.status(201).json({
@@ -55,7 +68,7 @@ export class InventoryController {
     }
   }
 
-  async getAllInventories(req: Request, res: Response): Promise<void> {
+  async getAllInventories(req: RequestToToken, res: Response): Promise<void> {
     try {
       const inventories = await this.getAllInventoriesUseCase.execute();
       res.status(200).json({
@@ -72,8 +85,20 @@ export class InventoryController {
     }
   }
 
-  async getInventory(req: Request, res: Response): Promise<void> {
+  async getInventory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const inventoryId: number = Number(req.params.inventoryId);
       const inventory = await this.getInventoryUseCase.execute(inventoryId);
       if (inventory) {
@@ -98,8 +123,20 @@ export class InventoryController {
     }
   }
 
-  async updateInventory(req: Request, res: Response): Promise<void> {
+  async updateInventory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const data: Inventory = req.body;
       const isUpdated = await this.updateInventoryUseCase.execute(data);
       if (isUpdated) {
@@ -124,8 +161,20 @@ export class InventoryController {
     }
   }
 
-  async deleteInventory(req: Request, res: Response): Promise<void> {
+  async deleteInventory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const inventoryId: number = Number(req.params.inventoryId);
       const isDeleted = await this.deleteInventoryUseCase.execute(inventoryId);
       if (isDeleted) {
@@ -150,8 +199,20 @@ export class InventoryController {
     }
   }
 
-  async addInventory(req: Request, res: Response): Promise<void> {
+  async addInventory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const request: IAddInventoryDto = req.body;
       const isAdded = await this.addInventoryUseCase.execute(request);
       if (isAdded) {
@@ -176,8 +237,23 @@ export class InventoryController {
     }
   }
 
-  async getInventoryByIdAndAdd(req: Request, res: Response): Promise<void> {
+  async getInventoryByIdAndAdd(
+    req: RequestToToken,
+    res: Response
+  ): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const inventoryId: number = Number(req.params.inventoryId);
       const inventory = await this.getInventoryByIdAndAddUseCase.execute(
         inventoryId
@@ -205,10 +281,22 @@ export class InventoryController {
   }
 
   async getInventoryByNameOrReference(
-    req: Request,
+    req: RequestToToken,
     res: Response
   ): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const request: string = req.params.nameOrReference;
       console.log("request", request);
       const inventory = await this.getInventoryByNameOrReferenceUseCase.execute(
@@ -236,8 +324,23 @@ export class InventoryController {
     }
   }
 
-  async updateInventoryFromApp(req: Request, res: Response): Promise<void> {
+  async updateInventoryFromApp(
+    req: RequestToToken,
+    res: Response
+  ): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const request: IInventoryDto = req.body;
       const isUpdated = await this.updateInventoryFromAppUseCase.execute(
         request

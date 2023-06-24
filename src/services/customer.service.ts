@@ -35,7 +35,7 @@ export class CustomerServiceImpl implements CustomerServiceInterface {
   async updateCustomer(
     idCustomer: number,
     customer: ICustomerDto
-  ): Promise<boolean> {
+  ): Promise<Customer> {
     const isUpdated = await this.customerRepository.updateCustomer(
       idCustomer,
       customer

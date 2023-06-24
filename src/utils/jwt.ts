@@ -7,7 +7,7 @@ export const generateToken = async (id: number, roleId: number) => {
         id,
         roleId,
       },
-      "secret key",
+      String(process.env.TOKEN_SECRET_KEY),
       {
         expiresIn: "1h",
       },
@@ -24,7 +24,7 @@ export const generateToken = async (id: number, roleId: number) => {
 
 export const verifyToken = (token: string) => {
   try {
-    const decoded = jwt.verify(token, "secret key");
+    const decoded = jwt.verify(token, String(process.env.TOKEN_SECRET_KEY));
     return decoded;
   } catch (err) {
     console.log("error", err);
