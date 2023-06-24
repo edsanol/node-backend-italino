@@ -8,6 +8,7 @@ import { DeleteCategoryUseCase } from "../usercases/category/delete-category.use
 import { Category } from "../domain/models/category.model";
 import { Request, Response } from "express";
 import { ICategoryDto } from "../dto/categoryDto";
+import { RequestToToken } from "../interfaces/token.interface";
 
 @injectable()
 export class CategoryController {
@@ -24,8 +25,20 @@ export class CategoryController {
     private deleteCategoryUseCase: DeleteCategoryUseCase
   ) {}
 
-  async createCategory(req: Request, res: Response): Promise<void> {
+  async createCategory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const category: ICategoryDto = req.body;
       const newCategory = await this.createCategoryUseCase.execute(category);
       res.status(201).json({
@@ -42,8 +55,20 @@ export class CategoryController {
     }
   }
 
-  async getAllCategories(req: Request, res: Response): Promise<void> {
+  async getAllCategories(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const categories = await this.getAllCategoriesUseCase.execute();
       res.status(200).json({
         success: true,
@@ -59,8 +84,20 @@ export class CategoryController {
     }
   }
 
-  async getCategory(req: Request, res: Response): Promise<void> {
+  async getCategory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const categoryId: number = Number(req.params.categoryId);
       const category = await this.getCategoryUseCase.execute(categoryId);
       if (category) {
@@ -85,8 +122,20 @@ export class CategoryController {
     }
   }
 
-  async updateCategory(req: Request, res: Response): Promise<void> {
+  async updateCategory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const categoryId: number = Number(req.params.categoryId);
       const data: ICategoryDto = req.body;
       const isUpdated = await this.updateCategoryUseCase.execute(
@@ -115,8 +164,20 @@ export class CategoryController {
     }
   }
 
-  async deleteCategory(req: Request, res: Response): Promise<void> {
+  async deleteCategory(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const categoryId: number = Number(req.params.categoryId);
       const isDeleted = await this.deleteCategoryUseCase.execute(categoryId);
       if (isDeleted) {

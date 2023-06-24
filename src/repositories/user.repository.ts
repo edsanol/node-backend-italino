@@ -22,6 +22,7 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
       .createQueryBuilder("user")
       .leftJoinAndSelect("user.rol", "rol")
       .where("user.email_user = :email_user", { email_user: email })
+      .leftJoinAndSelect("rol.activities", "activities")
       .getOne();
 
     if (!userByEmail) {

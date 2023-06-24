@@ -33,7 +33,10 @@ export class CustomerRepositoryImpl implements CustomerRepositoryInterface {
     return this.db.manager.save(newCustomer);
   }
   async getAllCustomers(): Promise<Customer[] | null> {
-    const allCustomers = await this.db.find();
+    const allCustomers = await this.db
+      .createQueryBuilder("customer")
+      .leftJoinAndSelect("customer.user", "user")
+      .getMany();
 
     if (!allCustomers) {
       return null;
@@ -66,17 +69,45 @@ export class CustomerRepositoryImpl implements CustomerRepositoryInterface {
   async updateCustomer(
     idCustomer: number,
     customer: ICustomerDto
-  ): Promise<boolean> {
-    const customerToUpdate = this.db.findOneBy({ id_customer: idCustomer });
+  ): Promise<Customer> {
+    const user = await this.dbUser.findOneByOrFail({
+      id_user: customer.userId,
+    });
+    const customerToUpdate = await this.db.findOneByOrFail({
+      id_customer: idCustomer,
+    });
 
     if (!customerToUpdate) {
-      return false;
+      throw new Error("Customer not found");
     }
 
-    await this.db.manager.save({ ...customerToUpdate, ...customer });
+    customerToUpdate.id_customer = customer.id!;
+    customerToUpdate.name_customer = customer.nameCustomer;
+    customerToUpdate.nit_customer = customer.nitCustomer;
+    customerToUpdate.address_customer = customer.addressCustomer;
+    customerToUpdate.phone_customer = customer.phoneCustomer;
+    customerToUpdate.status_customer = customer.statusCustomer;
+    customerToUpdate.updated_at = new Date();
 
-    return Promise.resolve(true);
+    await this.db.manager.save(customerToUpdate);
+
+    // get userupdated by idCustomer and by idUser
+    const customerUpdated = await this.db
+      .createQueryBuilder("customer")
+      .leftJoinAndSelect("customer.user", "user")
+      .where("user.id_user = :id_user", { id_user: user.id_user })
+      .andWhere("customer.id_customer = :id_customer", {
+        id_customer: customerToUpdate.id_customer,
+      })
+      .getOne();
+
+    if (!customerUpdated) {
+      throw new Error("Customer not found");
+    }
+
+    return customerUpdated;
   }
+
   async deleteCustomer(idCustomer: number): Promise<boolean> {
     const customerToDelete = await this.db.findOneBy({
       id_customer: idCustomer,

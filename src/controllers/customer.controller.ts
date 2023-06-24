@@ -8,6 +8,7 @@ import { DeleteCustomerUseCase } from "../usercases/customer/delete-customer.use
 import { GetCustomerByUserIdUseCase } from "../usercases/customer/get-customer-by-userid.usecase";
 import { ICustomerDto } from "../dto/customerDto";
 import { Request, Response } from "express";
+import { RequestToToken } from "../interfaces/token.interface";
 
 @injectable()
 export class CustomerController {
@@ -26,8 +27,20 @@ export class CustomerController {
     private getCustomerByUserIdUseCase: GetCustomerByUserIdUseCase
   ) {}
 
-  async createCustomer(req: Request, res: Response): Promise<void> {
+  async createCustomer(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const customer: ICustomerDto = req.body;
       const newCustomer = await this.createCustomerUseCase.execute(customer);
       res.status(201).json({
@@ -44,8 +57,20 @@ export class CustomerController {
     }
   }
 
-  async getAllCustomers(req: Request, res: Response): Promise<void> {
+  async getAllCustomers(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const allCustomers = await this.getAllCustomersUseCase.execute();
       res.status(200).json({
         success: true,
@@ -61,8 +86,20 @@ export class CustomerController {
     }
   }
 
-  async getCustomer(req: Request, res: Response): Promise<void> {
+  async getCustomer(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const customerId: number = Number(req.params.customerId);
       const customer = await this.getCustomerUseCase.execute(customerId);
       if (customer) {
@@ -87,8 +124,20 @@ export class CustomerController {
     }
   }
 
-  async updateCustomer(req: Request, res: Response): Promise<void> {
+  async updateCustomer(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const customerId: number = Number(req.params.customerId);
       const data: ICustomerDto = req.body;
       const isUpdated = await this.updateCustomerUseCase.execute(
@@ -117,8 +166,20 @@ export class CustomerController {
     }
   }
 
-  async deleteCustomer(req: Request, res: Response): Promise<void> {
+  async deleteCustomer(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const customerId: number = Number(req.params.customerId);
       const isDeleted = await this.deleteCustomerUseCase.execute(customerId);
       if (isDeleted) {
@@ -143,10 +204,24 @@ export class CustomerController {
     }
   }
 
-  async getCustomerByUserId(req: Request, res: Response): Promise<void> {
+  async getCustomerByUserId(req: RequestToToken, res: Response): Promise<void> {
     try {
-      const userId: number = Number(req.params.userId);
-      const customers = await this.getCustomerByUserIdUseCase.execute(userId);
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const userIdFromParams: number = Number(req.params.userId);
+      const customers = await this.getCustomerByUserIdUseCase.execute(
+        userIdFromParams
+      );
       if (customers) {
         res.status(200).json({
           success: true,

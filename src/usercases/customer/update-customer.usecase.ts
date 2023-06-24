@@ -11,7 +11,7 @@ export class UpdateCustomerUseCase {
     private customerService: CustomerServiceInterface
   ) {}
 
-  async execute(idCustomer: number, customer: ICustomerDto): Promise<boolean> {
+  async execute(idCustomer: number, customer: ICustomerDto): Promise<Customer> {
     const isUpdated = await this.customerService.updateCustomer(
       idCustomer,
       customer

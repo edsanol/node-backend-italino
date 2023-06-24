@@ -1,6 +1,8 @@
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
+import dotenv from "dotenv";
+dotenv.config();
 import { container } from "./config/inversify.config";
 import { UserRoutes } from "./routes/user.routes";
 import swaggerDocs from "./config/swagger";
@@ -41,6 +43,6 @@ const orderRoutes = container.resolve<OrderRoutes>(OrderRoutes);
 orderRoutes.configureRoutes(app);
 
 // Configuración de Swagger
-swaggerDocs(app, 3000);
+swaggerDocs(app, Number(process.env.APP_PORT));
 
 export default app;

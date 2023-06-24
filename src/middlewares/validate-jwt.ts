@@ -18,7 +18,10 @@ export const validateJWT = async (
   }
 
   try {
-    const decoded: any = jwt.verify(token, "secret key");
+    const decoded: any = jwt.verify(
+      token,
+      String(process.env.TOKEN_SECRET_KEY)
+    );
     req.userId = decoded.id;
     req.roleId = decoded.roleId;
     next();

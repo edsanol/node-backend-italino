@@ -23,22 +23,27 @@ export class UserRoutes {
     );
     router.get(
       "/users",
+      validateJWT,
       this.userController.getAllUsers.bind(this.userController)
     );
     router.post(
       "/users",
+      validateJWT,
       this.userController.createUser.bind(this.userController)
     );
     router.get(
       "/users/:userId",
+      validateJWT,
       this.userController.getUser.bind(this.userController)
     );
     router.put(
       "/users/:userId",
+      validateJWT,
       this.userController.updateUser.bind(this.userController)
     );
     router.delete(
       "/users/:userId",
+      validateJWT,
       this.userController.deleteUser.bind(this.userController)
     );
   }

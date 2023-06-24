@@ -1,5 +1,5 @@
 export interface ICustomerDto {
-  idCustomer?: number;
+  id?: number;
   nameCustomer: string;
   nitCustomer: string;
   addressCustomer: string;

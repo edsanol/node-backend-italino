@@ -7,6 +7,7 @@ import { UpdateActivityUseCase } from "../usercases/activity/update-activity.use
 import { DeleteActivityUseCase } from "../usercases/activity/delete-activity.usecase";
 import { Request, Response } from "express";
 import { IActivityDto } from "../dto/activityDto";
+import { RequestToToken } from "../interfaces/token.interface";
 
 @injectable()
 export class ActivityController {
@@ -23,7 +24,7 @@ export class ActivityController {
     private readonly deleteActivityUseCase: DeleteActivityUseCase
   ) {}
 
-  async createActivity(req: Request, res: Response): Promise<void> {
+  async createActivity(req: RequestToToken, res: Response): Promise<void> {
     try {
       const activity: IActivityDto = req.body;
       const newActivity = await this.createActivityUseCase.execute(activity);
@@ -41,8 +42,20 @@ export class ActivityController {
     }
   }
 
-  async getAllActivities(req: Request, res: Response): Promise<void> {
+  async getAllActivities(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const allActivities = await this.getAllActivitiesUseCase.execute();
       res.status(200).json({
         success: true,
@@ -58,8 +71,20 @@ export class ActivityController {
     }
   }
 
-  async getActivity(req: Request, res: Response): Promise<void> {
+  async getActivity(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const idActivity = Number(req.params.idActivity);
       const activity = await this.getActivityUseCase.execute(idActivity);
       res.status(200).json({
@@ -76,8 +101,20 @@ export class ActivityController {
     }
   }
 
-  async updateActivity(req: Request, res: Response): Promise<void> {
+  async updateActivity(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const idActivity = Number(req.params.idActivity);
       const activity: IActivityDto = req.body;
       const isUpdated = await this.updateActivityUseCase.execute(
@@ -98,8 +135,20 @@ export class ActivityController {
     }
   }
 
-  async deleteActivity(req: Request, res: Response): Promise<void> {
+  async deleteActivity(req: RequestToToken, res: Response): Promise<void> {
     try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
       const idActivity = Number(req.params.idActivity);
       const isDeleted = await this.deleteActivityUseCase.execute(idActivity);
       res.status(200).json({
