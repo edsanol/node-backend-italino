@@ -9,4 +9,6 @@ export interface OrderServiceInterface {
   getOrderById(id: number): Promise<Order | null>;
   getAllOrders(): Promise<Order[]>;
   getOrdersByUserId(userId: number): Promise<Order[]>;
+  getOrderAndOrderReturnsById(id: number): Promise<Order | null>;
+  getOrderByReference(reference: string): Promise<Order[] | null>;
 }

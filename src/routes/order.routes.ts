@@ -28,12 +28,20 @@ export class OrderRoutes {
       this.orderController.getOrderById.bind(this.orderController)
     );
     router.put(
-      "/order",
+      "/order/:idRole",
       this.orderController.updateOrder.bind(this.orderController)
     );
     router.post(
       "/order/return",
       this.orderController.createReturnOrder.bind(this.orderController)
+    );
+    router.get(
+      "/order/return/:id",
+      this.orderController.getOrderAndReturnById.bind(this.orderController)
+    );
+    router.get(
+      "/order/reference/:reference",
+      this.orderController.getOrderByReference.bind(this.orderController)
     );
   }
 }

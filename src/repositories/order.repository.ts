@@ -12,6 +12,35 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
     this.db = AppDataSource.getRepository(Order);
   }
 
+  async getOrderByReference(reference: string): Promise<Order[] | null> {
+    const order = await this.db
+      .createQueryBuilder("order")
+      .where("order.reference_order LIKE :reference", {
+        reference: `%${reference}%`,
+      })
+      .limit(10)
+      .getMany();
+
+    return order;
+  }
+
+  async getOrderAndOrderReturnsById(id: number): Promise<Order | null> {
+    const order = await this.db
+      .createQueryBuilder("order")
+      .leftJoinAndSelect("order.user", "user")
+      .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_returns", "order_returns")
+      .leftJoinAndSelect("order_returns.inventory", "inventory")
+      .where("order.id_order = :id", { id })
+      .getOne();
+
+    if (order) {
+      order.user.password_user = "";
+    }
+
+    return order;
+  }
+
   async createOrderReturns(order: Order): Promise<Order> {
     return await this.db.save(order);
   }

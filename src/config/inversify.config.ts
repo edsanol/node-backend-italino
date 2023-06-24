@@ -85,6 +85,11 @@ import { CreateReturnOrderUseCase } from "../usercases/order/create-return.useca
 import { OrderReturnRepositoryInterface } from "../domain/repositories/order-return.respository.interface";
 import { OrderReturnRepositoryImpl } from "../repositories/order-return.repository";
 import { AddInventoryUseCase } from "../usercases/inventory/add-inventory.usecase";
+import { GetInventoryByIdAndAddUseCase } from "../usercases/inventory/get-inventory-add.usecase";
+import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get-inventory-by-name-or-reference.usecase";
+import { GetOrderAndReturnByIdUseCase } from "../usercases/order/get-order-and-return-by-id.usecase";
+import { GetOrderByReferenceUseCase } from "../usercases/order/get-order-by-reference.usecase";
+import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
 
 const container = new Container();
 
@@ -193,6 +198,17 @@ container
 container
   .bind<AddInventoryUseCase>(TYPES.AddInventoryUseCase)
   .to(AddInventoryUseCase);
+container
+  .bind<GetInventoryByIdAndAddUseCase>(TYPES.GetInventoryByIdAndAddUseCase)
+  .to(GetInventoryByIdAndAddUseCase);
+container
+  .bind<GetInventoryByNameOrReferenceUseCase>(
+    TYPES.GetInventoryByNameOrReferenceUseCase
+  )
+  .to(GetInventoryByNameOrReferenceUseCase);
+container
+  .bind<UpdateInventoryFromAppUseCase>(TYPES.UpdateInventoryFromAppUseCase)
+  .to(UpdateInventoryFromAppUseCase);
 
 container
   .bind<CreateActivityUseCase>(TYPES.CreateActivityUseCase)
@@ -261,6 +277,12 @@ container
 container
   .bind<CreateReturnOrderUseCase>(TYPES.CreateReturnOrderUseCase)
   .to(CreateReturnOrderUseCase);
+container
+  .bind<GetOrderAndReturnByIdUseCase>(TYPES.GetOrderAndReturnByIdUseCase)
+  .to(GetOrderAndReturnByIdUseCase);
+container
+  .bind<GetOrderByReferenceUseCase>(TYPES.GetOrderByReferenceUseCase)
+  .to(GetOrderByReferenceUseCase);
 
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);

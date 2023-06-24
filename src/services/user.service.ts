@@ -32,7 +32,7 @@ export class UserServiceImpl implements UserServiceInterface {
     return user;
   }
 
-  async updateUser(userId: number, data: Partial<IUserDto>): Promise<boolean> {
+  async updateUser(userId: number, data: IUserDto): Promise<User> {
     const isUpdated = await this.userRepository.updateUser(userId, data);
     return isUpdated;
   }

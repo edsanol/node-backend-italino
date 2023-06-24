@@ -44,19 +44,24 @@ export class CategoryRepositoryImpl implements CategoryRepositoryInterface {
   }
   async updateCategory(
     idCategory: number,
-    category: Category
-  ): Promise<boolean> {
+    category: ICategoryDto
+  ): Promise<Category> {
     const categoryToUpdate = await this.db.findOneBy({
       id_category: idCategory,
     });
 
     if (!categoryToUpdate) {
-      return false;
+      throw new Error("Category not found");
     }
 
-    await this.db.manager.save({ ...categoryToUpdate, ...category });
+    categoryToUpdate.id_category = category.id!;
+    categoryToUpdate.reference_category = category.referenceCategory;
+    categoryToUpdate.name_category = category.nameCategory;
+    categoryToUpdate.status_category = category.statusCategory;
+    categoryToUpdate.description_category = category.descriptionCategory;
+    categoryToUpdate.updated_at = new Date();
 
-    return Promise.resolve(true);
+    return this.db.manager.save(categoryToUpdate);
   }
   async deleteCategory(idCategory: number): Promise<boolean> {
     const categoryToDelete = await this.db.findOneBy({

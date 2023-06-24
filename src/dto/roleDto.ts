@@ -5,5 +5,5 @@ export interface IRoleDto {
   statusRole: string;
   createdAt?: Date;
   updatedAt?: Date;
-  activityId: number[];
+  activities: number[];
 }

@@ -24,7 +24,7 @@ export class RoleServiceImpl implements RoleServiceInterface {
     const roleById = await this.roleRepository.getRoleById(idRole);
     return roleById;
   }
-  async updateRole(idRole: number, role: IRoleDto): Promise<boolean> {
+  async updateRole(idRole: number, role: IRoleDto): Promise<Role> {
     const isUpdated = await this.roleRepository.updateRole(idRole, role);
     return isUpdated;
   }

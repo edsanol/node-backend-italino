@@ -10,6 +10,9 @@ import { Inventory } from "../domain/models/inventory.model";
 import { IInventoryDto } from "../dto/inventoryDto";
 import { AddInventoryUseCase } from "../usercases/inventory/add-inventory.usecase";
 import { IAddInventoryDto } from "../dto/addInventoryDto";
+import { GetInventoryByIdAndAddUseCase } from "../usercases/inventory/get-inventory-add.usecase";
+import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get-inventory-by-name-or-reference.usecase";
+import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
 
 @injectable()
 export class InventoryController {
@@ -25,7 +28,13 @@ export class InventoryController {
     @inject(TYPES.DeleteInventoryUseCase)
     private deleteInventoryUseCase: DeleteInventoryUseCase,
     @inject(TYPES.AddInventoryUseCase)
-    private addInventoryUseCase: AddInventoryUseCase
+    private addInventoryUseCase: AddInventoryUseCase,
+    @inject(TYPES.GetInventoryByIdAndAddUseCase)
+    private getInventoryByIdAndAddUseCase: GetInventoryByIdAndAddUseCase,
+    @inject(TYPES.GetInventoryByNameOrReferenceUseCase)
+    private getInventoryByNameOrReferenceUseCase: GetInventoryByNameOrReferenceUseCase,
+    @inject(TYPES.UpdateInventoryFromAppUseCase)
+    private updateInventoryFromAppUseCase: UpdateInventoryFromAppUseCase
   ) {}
 
   async createInventory(req: Request, res: Response): Promise<void> {
@@ -149,7 +158,7 @@ export class InventoryController {
         res.status(200).json({
           success: true,
           message: "Inventory added successfully",
-          data: true,
+          data: isAdded,
         });
       } else {
         res.status(404).json({
@@ -162,6 +171,94 @@ export class InventoryController {
       res.status(500).json({
         success: false,
         message: "Error adding inventory",
+        error: error.message,
+      });
+    }
+  }
+
+  async getInventoryByIdAndAdd(req: Request, res: Response): Promise<void> {
+    try {
+      const inventoryId: number = Number(req.params.inventoryId);
+      const inventory = await this.getInventoryByIdAndAddUseCase.execute(
+        inventoryId
+      );
+      if (inventory) {
+        res.status(200).json({
+          success: true,
+          message: "Inventory added successfully",
+          data: inventory,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Inventory not found",
+          error: "Inventory not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error getting inventory",
+        error: error.message,
+      });
+    }
+  }
+
+  async getInventoryByNameOrReference(
+    req: Request,
+    res: Response
+  ): Promise<void> {
+    try {
+      const request: string = req.params.nameOrReference;
+      console.log("request", request);
+      const inventory = await this.getInventoryByNameOrReferenceUseCase.execute(
+        request
+      );
+      if (inventory) {
+        res.status(200).json({
+          success: true,
+          message: "Inventory retrieved successfully",
+          data: inventory,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Inventory not found",
+          error: "Inventory not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error retrieving inventory",
+        error: error.message,
+      });
+    }
+  }
+
+  async updateInventoryFromApp(req: Request, res: Response): Promise<void> {
+    try {
+      const request: IInventoryDto = req.body;
+      const isUpdated = await this.updateInventoryFromAppUseCase.execute(
+        request
+      );
+      if (isUpdated) {
+        res.status(200).json({
+          success: true,
+          message: "Inventory updated successfully",
+          data: isUpdated,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Inventory not found",
+          error: "Inventory not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error updating inventory",
         error: error.message,
       });
     }

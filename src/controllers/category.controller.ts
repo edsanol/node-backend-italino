@@ -88,7 +88,7 @@ export class CategoryController {
   async updateCategory(req: Request, res: Response): Promise<void> {
     try {
       const categoryId: number = Number(req.params.categoryId);
-      const data: Category = req.body;
+      const data: ICategoryDto = req.body;
       const isUpdated = await this.updateCategoryUseCase.execute(
         categoryId,
         data
@@ -97,7 +97,7 @@ export class CategoryController {
         res.status(200).json({
           success: true,
           message: "Category updated successfully",
-          data: true,
+          data: isUpdated,
         });
       } else {
         res.status(404).json({
