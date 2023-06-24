@@ -161,7 +161,7 @@ export class UserController {
   async updateUser(req: Request, res: Response): Promise<void> {
     try {
       const userId: number = Number(req.params.userId);
-      const data: Partial<IUserDto> = req.body;
+      const data: IUserDto = req.body;
       const isUpdated = await this.updateUserUseCase.execute(userId, data);
       if (isUpdated) {
         res.status(200).json({

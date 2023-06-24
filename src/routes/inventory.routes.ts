@@ -35,5 +35,23 @@ export class InventoryRoutes {
       "/inventories/add",
       this.inventoryController.addInventory.bind(this.inventoryController)
     );
+    router.get(
+      "/inventories/add/:inventoryId",
+      this.inventoryController.getInventoryByIdAndAdd.bind(
+        this.inventoryController
+      )
+    );
+    router.get(
+      "/inventories/search/:nameOrReference",
+      this.inventoryController.getInventoryByNameOrReference.bind(
+        this.inventoryController
+      )
+    );
+    router.put(
+      "/inventories/app",
+      this.inventoryController.updateInventoryFromApp.bind(
+        this.inventoryController
+      )
+    );
   }
 }

@@ -28,8 +28,8 @@ export class CategoryServiceImpl implements CategoryServiceInterface {
   }
   async updateCategory(
     idCategory: number,
-    category: Category
-  ): Promise<boolean> {
+    category: ICategoryDto
+  ): Promise<Category> {
     const isUpdated = await this.categoryRepository.updateCategory(
       idCategory,
       category

@@ -18,7 +18,7 @@ export class RoleRepositoryImpl implements RoleRepositoryInterface {
 
   async createRole(role: IRoleDto): Promise<Role> {
     const activity = await this.dbActivities.findBy({
-      id_activity: In(role.activityId),
+      id_activity: In(role.activities),
     });
 
     const newRole = new Role();
@@ -56,21 +56,23 @@ export class RoleRepositoryImpl implements RoleRepositoryInterface {
 
     return roles;
   }
-  async updateRole(idRole: number, role: IRoleDto): Promise<boolean> {
+  async updateRole(idRole: number, role: IRoleDto): Promise<Role> {
     const roleToUpdate = await this.db.findOneByOrFail({ id_role: idRole });
 
     if (!roleToUpdate) {
-      return false;
+      throw new Error("Role not found");
     }
 
+    roleToUpdate.id_role = idRole;
     roleToUpdate.name_role = role.nameRole;
     roleToUpdate.description_role = role.descriptionRole;
     roleToUpdate.status_role = role.statusRole;
     roleToUpdate.updated_at = new Date();
+    roleToUpdate.activities = await this.dbActivities.findBy({
+      id_activity: In(role.activities),
+    });
 
-    await this.db.manager.save(roleToUpdate);
-
-    return Promise.resolve(true);
+    return await this.db.manager.save(roleToUpdate);
   }
   async deleteRole(idRole: number): Promise<boolean> {
     const roleToDelete = await this.db.findOneByOrFail({ id_role: idRole });

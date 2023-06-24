@@ -33,7 +33,7 @@ export class UserRoutes {
       "/users/:userId",
       this.userController.getUser.bind(this.userController)
     );
-    router.patch(
+    router.put(
       "/users/:userId",
       this.userController.updateUser.bind(this.userController)
     );

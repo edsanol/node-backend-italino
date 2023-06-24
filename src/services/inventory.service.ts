@@ -17,9 +17,54 @@ export class InventoryServiceImpl implements InventoryServiceInterface {
     private userRepository: UserRepositoryInterface
   ) {}
 
+  async updateInventoryFromApp(inventory: IInventoryDto): Promise<Inventory> {
+    const isUpdated = await this.inventoryRepository.updateInventoryFromApp(
+      inventory
+    );
+
+    if (!isUpdated) {
+      throw new Error("Inventory not found");
+    }
+
+    return isUpdated;
+  }
+
+  async getInventoryByNameOrReference(
+    nameOrReference: string
+  ): Promise<Inventory[] | null> {
+    const inventory =
+      await this.inventoryRepository.getInventoryByNameOrReference(
+        nameOrReference
+      );
+
+    if (!inventory) {
+      return null;
+    }
+
+    return inventory;
+  }
+
+  async getInventoryByIdAndAddInventory(
+    idInventory: number
+  ): Promise<Inventory> {
+    const inventory =
+      await this.inventoryRepository.getInventoryByIdAndAddInventory(
+        idInventory
+      );
+    if (!inventory) {
+      throw new Error("Inventory not found");
+    }
+    return inventory;
+  }
+
   async addInventory(addInventory: IAddInventoryDto): Promise<Inventory> {
     const existingInventory = await this.inventoryRepository.getInventoryById(
       addInventory.inventoryId
+    );
+
+    console.log(
+      "existingInventory",
+      JSON.stringify(existingInventory, null, 2)
     );
 
     const existingUser = await this.userRepository.getUserById(

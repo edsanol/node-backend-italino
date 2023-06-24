@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -14,7 +15,10 @@ export class AddInventory {
   @PrimaryGeneratedColumn()
   id_add_inventory: number;
 
-  @ManyToOne(() => Inventory, (inventory) => inventory.add_inventory)
+  @ManyToOne(() => Inventory, (inventory) => inventory.add_inventory, {
+    nullable: false,
+  })
+  @JoinColumn({ name: "id_inventory" })
   inventory: Inventory;
 
   @ManyToOne(() => User, (user) => user.add_inventory)

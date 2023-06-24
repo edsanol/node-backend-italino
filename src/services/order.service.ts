@@ -29,6 +29,14 @@ export class OrderServiceImpl implements OrderServiceInterface {
     private readonly orderReturnRepository: OrderReturnRepositoryInterface
   ) {}
 
+  async getOrderByReference(reference: string): Promise<Order[] | null> {
+    return await this.orderRepository.getOrderByReference(reference);
+  }
+
+  async getOrderAndOrderReturnsById(id: number): Promise<Order | null> {
+    return await this.orderRepository.getOrderAndOrderReturnsById(id);
+  }
+
   async createOrderReturns(order: IOrderDto): Promise<Order> {
     const existingOrder = await this.orderRepository.getOrderById(order.id!);
     const inventories = await Promise.all(
@@ -98,6 +106,7 @@ export class OrderServiceImpl implements OrderServiceInterface {
 
     const newOrder = new Order();
     newOrder.id_order = existingOrder.id_order;
+    newOrder.reference_order = existingOrder.reference_order;
     newOrder.customer = existingOrder.customer;
     newOrder.user = existingOrder.user;
     newOrder.order_details = updatedOrderDetails;
@@ -198,6 +207,8 @@ export class OrderServiceImpl implements OrderServiceInterface {
     }
 
     const newOrder = new Order();
+    // reference_order ital + random
+    newOrder.reference_order = `IT${Math.floor(Math.random() * 1000000000)}`;
     newOrder.customer = customer;
     newOrder.user = user;
     newOrder.status_order = order.statusOrder;

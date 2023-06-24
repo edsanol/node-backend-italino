@@ -8,6 +8,8 @@ import { GetAllOrdersByUserIdUseCase } from "../usercases/order/getByUserId-orde
 import { GetOrderByIdUseCase } from "../usercases/order/getById-order.usecase";
 import { UpdateOrderUseCase } from "../usercases/order/update-order.usecase";
 import { CreateReturnOrderUseCase } from "../usercases/order/create-return.usecase";
+import { GetOrderAndReturnByIdUseCase } from "../usercases/order/get-order-and-return-by-id.usecase";
+import { GetOrderByReferenceUseCase } from "../usercases/order/get-order-by-reference.usecase";
 
 @injectable()
 export class OrderController {
@@ -23,7 +25,11 @@ export class OrderController {
     @inject(TYPES.UpdateOrderUseCase)
     private readonly updateOrderUseCase: UpdateOrderUseCase,
     @inject(TYPES.CreateReturnOrderUseCase)
-    private readonly createReturnOrderUseCase: CreateReturnOrderUseCase
+    private readonly createReturnOrderUseCase: CreateReturnOrderUseCase,
+    @inject(TYPES.GetOrderAndReturnByIdUseCase)
+    private readonly getOrderAndReturnByIdUseCase: GetOrderAndReturnByIdUseCase,
+    @inject(TYPES.GetOrderByReferenceUseCase)
+    private readonly getOrderByReferenceUseCase: GetOrderByReferenceUseCase
   ) {}
 
   async createOrder(req: Request, res: Response) {
@@ -129,6 +135,42 @@ export class OrderController {
         success: false,
         message: "Error creating order",
         error: `Error creating order ${error.message}`,
+      });
+    }
+  }
+
+  async getOrderAndReturnById(req: Request, res: Response) {
+    try {
+      const id = Number(req.params.id);
+      const order = await this.getOrderAndReturnByIdUseCase.execute(id);
+      res.status(201).json({
+        success: true,
+        message: "Order by id",
+        data: order,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting order by id ${error.message}`,
+      });
+    }
+  }
+
+  async getOrderByReference(req: Request, res: Response) {
+    try {
+      const reference = req.params.reference;
+      const order = await this.getOrderByReferenceUseCase.execute(reference);
+      res.status(201).json({
+        success: true,
+        message: "Order by reference",
+        data: order,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting order by reference ${error.message}`,
       });
     }
   }

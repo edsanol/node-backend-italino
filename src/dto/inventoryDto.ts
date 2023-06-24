@@ -1,5 +1,5 @@
 export interface IInventoryDto {
-  idInventory?: number;
+  id?: number;
   referenceInventory: string;
   nameInventory: string;
   descriptionInventory: string;

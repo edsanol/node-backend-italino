@@ -17,6 +17,9 @@ export class Order {
   @PrimaryGeneratedColumn()
   id_order: number;
 
+  @Column()
+  reference_order: string;
+
   @ManyToOne(() => Customer, (customer) => customer.orders)
   customer: Customer;
 

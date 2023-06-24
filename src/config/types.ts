@@ -36,6 +36,11 @@ const TYPES = {
   GetInventoryUseCase: Symbol.for("GetInventoryUseCase"),
   UpdateInventoryUseCase: Symbol.for("UpdateInventoryUseCase"),
   AddInventoryUseCase: Symbol.for("AddInventoryUseCase"),
+  GetInventoryByIdAndAddUseCase: Symbol.for("GetInventoryByIdAndAddUseCase"),
+  GetInventoryByNameOrReferenceUseCase: Symbol.for(
+    "GetInventoryByNameOrReferenceUseCase"
+  ),
+  UpdateInventoryFromAppUseCase: Symbol.for("UpdateInventoryFromAppUseCase"),
 
   CreateActivityUseCase: Symbol.for("CreateActivityUseCase"),
   GetAllActivitiesUseCase: Symbol.for("GetAllActivitiesUseCase"),
@@ -62,6 +67,8 @@ const TYPES = {
   GetOrderByIdUseCase: Symbol.for("GetOrderByIdUseCase"),
   UpdateOrderUseCase: Symbol.for("UpdateOrderUseCase"),
   CreateReturnOrderUseCase: Symbol.for("CreateReturnOrderUseCase"),
+  GetOrderAndReturnByIdUseCase: Symbol.for("GetOrderAndReturnByIdUseCase"),
+  GetOrderByReferenceUseCase: Symbol.for("GetOrderByReferenceUseCase"),
 
   UserController: Symbol.for("UserController"),
   CategoryController: Symbol.for("CategoryController"),

@@ -1,5 +1,5 @@
 export interface ICategoryDto {
-  idCategory?: number;
+  id?: number;
   referenceCategory: string;
   nameCategory: string;
   descriptionCategory: string;

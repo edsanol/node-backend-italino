@@ -9,4 +9,9 @@ export interface InventoryServiceInterface {
   updateInventory(inventory: Inventory): Promise<boolean>;
   deleteInventory(idInventory: number): Promise<boolean>;
   addInventory(addInventory: IAddInventoryDto): Promise<Inventory>;
+  getInventoryByIdAndAddInventory(idInventory: number): Promise<Inventory>;
+  getInventoryByNameOrReference(
+    nameOrReference: string
+  ): Promise<Inventory[] | null>;
+  updateInventoryFromApp(inventory: IInventoryDto): Promise<Inventory>;
 }
