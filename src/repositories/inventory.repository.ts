@@ -55,13 +55,15 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
   ): Promise<Inventory[] | null> {
     const inventory = await this.db
       .createQueryBuilder("inventory")
+      .leftJoinAndSelect("inventory.category", "category")
+      .leftJoinAndSelect("inventory.add_inventory", "add_inventory")
       .where("inventory.name_inventory LIKE :nameOrReference", {
         nameOrReference: `%${nameOrReference}%`,
       })
       .orWhere("inventory.reference_inventory LIKE :nameOrReference", {
         nameOrReference: `%${nameOrReference}%`,
       })
-      .limit(10)
+      .limit(50)
       .getMany();
 
     if (!inventory) {
@@ -119,6 +121,7 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
       .createQueryBuilder("inventory")
       .leftJoinAndSelect("inventory.category", "category")
       .leftJoinAndSelect("inventory.add_inventory", "add_inventory")
+      .limit(50)
       .getMany();
 
     if (!allInventories) {
