@@ -17,6 +17,19 @@ export class InventoryServiceImpl implements InventoryServiceInterface {
     private userRepository: UserRepositoryInterface
   ) {}
 
+  async getInventoriesByCategoryId(
+    idCategory: number
+  ): Promise<Inventory[] | null> {
+    const inventories =
+      await this.inventoryRepository.getInventoriesByCategoryId(idCategory);
+
+    if (!inventories) {
+      return null;
+    }
+
+    return inventories;
+  }
+
   async updateInventoryFromApp(inventory: IInventoryDto): Promise<Inventory> {
     const isUpdated = await this.inventoryRepository.updateInventoryFromApp(
       inventory
