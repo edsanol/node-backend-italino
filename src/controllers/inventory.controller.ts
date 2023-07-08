@@ -14,6 +14,7 @@ import { GetInventoryByIdAndAddUseCase } from "../usercases/inventory/get-invent
 import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get-inventory-by-name-or-reference.usecase";
 import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
 import { RequestToToken } from "../interfaces/token.interface";
+import { GetInventoriesByCategoryIdUseCase } from "../usercases/inventory/get-inventories-by-category-id.usecase";
 
 @injectable()
 export class InventoryController {
@@ -35,7 +36,9 @@ export class InventoryController {
     @inject(TYPES.GetInventoryByNameOrReferenceUseCase)
     private getInventoryByNameOrReferenceUseCase: GetInventoryByNameOrReferenceUseCase,
     @inject(TYPES.UpdateInventoryFromAppUseCase)
-    private updateInventoryFromAppUseCase: UpdateInventoryFromAppUseCase
+    private updateInventoryFromAppUseCase: UpdateInventoryFromAppUseCase,
+    @inject(TYPES.GetInventoriesByCategoryIdUseCase)
+    private getInventoriesByCategoryIdUseCase: GetInventoriesByCategoryIdUseCase
   ) {}
 
   async createInventory(req: RequestToToken, res: Response): Promise<void> {
@@ -362,6 +365,49 @@ export class InventoryController {
       res.status(500).json({
         success: false,
         message: "Error updating inventory",
+        error: error.message,
+      });
+    }
+  }
+
+  async getInventoriesByCategoryId(
+    req: RequestToToken,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const categoryId: number = Number(req.params.categoryId);
+      const inventory = await this.getInventoriesByCategoryIdUseCase.execute(
+        categoryId
+      );
+      if (inventory) {
+        res.status(200).json({
+          success: true,
+          message: "Inventory retrieved successfully",
+          data: inventory,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Inventory not found",
+          error: "Inventory not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error retrieving inventory",
         error: error.message,
       });
     }

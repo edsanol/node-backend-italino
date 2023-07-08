@@ -14,4 +14,5 @@ export interface InventoryServiceInterface {
     nameOrReference: string
   ): Promise<Inventory[] | null>;
   updateInventoryFromApp(inventory: IInventoryDto): Promise<Inventory>;
+  getInventoriesByCategoryId(idCategory: number): Promise<Inventory[] | null>;
 }

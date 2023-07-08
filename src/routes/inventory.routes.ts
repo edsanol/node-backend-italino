@@ -62,5 +62,12 @@ export class InventoryRoutes {
         this.inventoryController
       )
     );
+    router.get(
+      "/inventories/category/:categoryId",
+      validateJWT,
+      this.inventoryController.getInventoriesByCategoryId.bind(
+        this.inventoryController
+      )
+    );
   }
 }

@@ -90,6 +90,7 @@ import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get
 import { GetOrderAndReturnByIdUseCase } from "../usercases/order/get-order-and-return-by-id.usecase";
 import { GetOrderByReferenceUseCase } from "../usercases/order/get-order-by-reference.usecase";
 import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
+import { GetInventoriesByCategoryIdUseCase } from "../usercases/inventory/get-inventories-by-category-id.usecase";
 
 const container = new Container();
 
@@ -209,6 +210,11 @@ container
 container
   .bind<UpdateInventoryFromAppUseCase>(TYPES.UpdateInventoryFromAppUseCase)
   .to(UpdateInventoryFromAppUseCase);
+container
+  .bind<GetInventoriesByCategoryIdUseCase>(
+    TYPES.GetInventoriesByCategoryIdUseCase
+  )
+  .to(GetInventoriesByCategoryIdUseCase);
 
 container
   .bind<CreateActivityUseCase>(TYPES.CreateActivityUseCase)
