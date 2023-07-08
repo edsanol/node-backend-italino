@@ -19,6 +19,22 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     this.dbAddInventory = AppDataSource.getRepository(AddInventory);
   }
 
+  async getInventoriesByCategoryId(
+    idCategory: number
+  ): Promise<Inventory[] | null> {
+    const inventories = await this.db
+      .createQueryBuilder("inventory")
+      .leftJoinAndSelect("inventory.category", "category")
+      .where("category.id_category = :idCategory", { idCategory })
+      .getMany();
+
+    if (!inventories) {
+      return null;
+    }
+
+    return inventories;
+  }
+
   async updateInventoryFromApp(inventory: IInventoryDto): Promise<Inventory> {
     const category = await this.dbCategory.findOneByOrFail({
       id_category: inventory.categoryId,

@@ -41,6 +41,9 @@ const TYPES = {
     "GetInventoryByNameOrReferenceUseCase"
   ),
   UpdateInventoryFromAppUseCase: Symbol.for("UpdateInventoryFromAppUseCase"),
+  GetInventoriesByCategoryIdUseCase: Symbol.for(
+    "GetInventoriesByCategoryIdUseCase"
+  ),
 
   CreateActivityUseCase: Symbol.for("CreateActivityUseCase"),
   GetAllActivitiesUseCase: Symbol.for("GetAllActivitiesUseCase"),
