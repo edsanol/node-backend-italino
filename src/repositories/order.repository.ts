@@ -15,10 +15,15 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
   async getOrderByReference(reference: string): Promise<Order[] | null> {
     const order = await this.db
       .createQueryBuilder("order")
+      .leftJoinAndSelect("order.user", "user")
+      .leftJoinAndSelect("order.customer", "customer")
+      .leftJoinAndSelect("order.order_returns", "order_returns")
+      .leftJoinAndSelect("order.order_details", "order_details")
+      .leftJoinAndSelect("order_details.inventory", "inventory")
       .where("order.reference_order LIKE :reference", {
         reference: `%${reference}%`,
       })
-      .limit(10)
+      .limit(1000)
       .getMany();
 
     return order;
@@ -53,6 +58,7 @@ export class OrderRepositoryImpl implements OrderRepositoryInterface {
       .leftJoinAndSelect("order.order_returns", "order_returns")
       .leftJoinAndSelect("order.order_details", "order_details")
       .leftJoinAndSelect("order_details.inventory", "inventory")
+      .limit(1000)
       .getMany();
 
     orders.forEach((order) => {

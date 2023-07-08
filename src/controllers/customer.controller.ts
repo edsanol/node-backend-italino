@@ -9,6 +9,7 @@ import { GetCustomerByUserIdUseCase } from "../usercases/customer/get-customer-b
 import { ICustomerDto } from "../dto/customerDto";
 import { Request, Response } from "express";
 import { RequestToToken } from "../interfaces/token.interface";
+import { GetCustomerByNameOrNitUseCase } from "../usercases/customer/get-customer-by-name-or-nit.usecase";
 
 @injectable()
 export class CustomerController {
@@ -24,7 +25,9 @@ export class CustomerController {
     @inject(TYPES.DeleteCustomerUseCase)
     private deleteCustomerUseCase: DeleteCustomerUseCase,
     @inject(TYPES.GetCustomerByUserIdUseCase)
-    private getCustomerByUserIdUseCase: GetCustomerByUserIdUseCase
+    private getCustomerByUserIdUseCase: GetCustomerByUserIdUseCase,
+    @inject(TYPES.GetCustomerByNameOrNitUseCase)
+    private getCustomerByNameOrNitUseCase: GetCustomerByNameOrNitUseCase
   ) {}
 
   async createCustomer(req: RequestToToken, res: Response): Promise<void> {
@@ -221,6 +224,48 @@ export class CustomerController {
       const userIdFromParams: number = Number(req.params.userId);
       const customers = await this.getCustomerByUserIdUseCase.execute(
         userIdFromParams
+      );
+      if (customers) {
+        res.status(200).json({
+          success: true,
+          message: "Customer",
+          data: customers,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Customer not found",
+          error: "Customer not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting customer ${error.message}`,
+      });
+    }
+  }
+
+  async getCustomerByNameOrNit(
+    req: RequestToToken,
+    res: Response
+  ): Promise<void> {
+    try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+      const { nameOrNit } = req.params;
+      const customers = await this.getCustomerByNameOrNitUseCase.execute(
+        nameOrNit as string
       );
       if (customers) {
         res.status(200).json({

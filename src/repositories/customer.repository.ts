@@ -15,6 +15,26 @@ export class CustomerRepositoryImpl implements CustomerRepositoryInterface {
     this.db = AppDataSource.getRepository(Customer);
     this.dbUser = AppDataSource.getRepository(User);
   }
+
+  async getCustomerByNameOrNIT(nameOrNit: string): Promise<Customer[] | null> {
+    const customerByNameOrNit = await this.db
+      .createQueryBuilder("customer")
+      .leftJoinAndSelect("customer.user", "user")
+      .where("customer.name_customer LIKE :nameOrNit", {
+        nameOrNit: `%${nameOrNit}%`,
+      })
+      .orWhere("customer.nit_customer LIKE :nameOrNit", {
+        nameOrNit: `%${nameOrNit}%`,
+      })
+      .limit(20)
+      .getMany();
+
+    if (!customerByNameOrNit) {
+      return null;
+    }
+
+    return customerByNameOrNit;
+  }
   async createCustomer(customer: ICustomerDto): Promise<Customer> {
     const user = await this.dbUser.findOneByOrFail({
       id_user: customer.userId,
@@ -36,6 +56,7 @@ export class CustomerRepositoryImpl implements CustomerRepositoryInterface {
     const allCustomers = await this.db
       .createQueryBuilder("customer")
       .leftJoinAndSelect("customer.user", "user")
+      .limit(50)
       .getMany();
 
     if (!allCustomers) {

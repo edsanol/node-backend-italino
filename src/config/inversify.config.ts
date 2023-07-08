@@ -90,6 +90,7 @@ import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get
 import { GetOrderAndReturnByIdUseCase } from "../usercases/order/get-order-and-return-by-id.usecase";
 import { GetOrderByReferenceUseCase } from "../usercases/order/get-order-by-reference.usecase";
 import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
+import { GetCustomerByNameOrNitUseCase } from "../usercases/customer/get-customer-by-name-or-nit.usecase";
 
 const container = new Container();
 
@@ -258,6 +259,9 @@ container
 container
   .bind<GetCustomerByUserIdUseCase>(TYPES.GetCustomerByUserIdUseCase)
   .to(GetCustomerByUserIdUseCase);
+container
+  .bind<GetCustomerByNameOrNitUseCase>(TYPES.GetCustomerByNameOrNitUseCase)
+  .to(GetCustomerByNameOrNitUseCase);
 
 container
   .bind<CreateOrderUseCase>(TYPES.CreateOrderUseCase)

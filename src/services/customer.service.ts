@@ -12,6 +12,12 @@ export class CustomerServiceImpl implements CustomerServiceInterface {
     private customerRepository: CustomerRepositoryInterface
   ) {}
 
+  async getCustomerByNameOrNIT(nameOrNit: string): Promise<Customer[] | null> {
+    const customerByNameOrNit =
+      await this.customerRepository.getCustomerByNameOrNIT(nameOrNit);
+    return customerByNameOrNit;
+  }
+
   async createCustomer(customer: ICustomerDto): Promise<Customer> {
     const newCustomer = await this.customerRepository.createCustomer(customer);
     return newCustomer;

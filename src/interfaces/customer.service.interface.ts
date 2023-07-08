@@ -8,4 +8,5 @@ export interface CustomerServiceInterface {
   getCustomerByUserId(idUser: number): Promise<Customer[] | null>;
   updateCustomer(idCustomer: number, customer: ICustomerDto): Promise<Customer>;
   deleteCustomer(idCustomer: number): Promise<boolean>;
+  getCustomerByNameOrNIT(nameOrNit: string): Promise<Customer[] | null>;
 }
