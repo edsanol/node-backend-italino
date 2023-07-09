@@ -91,6 +91,7 @@ import { GetOrderAndReturnByIdUseCase } from "../usercases/order/get-order-and-r
 import { GetOrderByReferenceUseCase } from "../usercases/order/get-order-by-reference.usecase";
 import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
 import { GetInventoriesByCategoryIdUseCase } from "../usercases/inventory/get-inventories-by-category-id.usecase";
+import { UpdatePasswordUseCase } from "../usercases/user/update-password.usecase";
 
 const container = new Container();
 
@@ -164,6 +165,9 @@ container
   .bind<GetAllUsersUseCase>(TYPES.GetAllUsersUseCase)
   .to(GetAllUsersUseCase);
 container.bind<LoginUserUseCase>(TYPES.LoginUserUseCase).to(LoginUserUseCase);
+container
+  .bind<UpdatePasswordUseCase>(TYPES.UpdatePasswordUseCase)
+  .to(UpdatePasswordUseCase);
 
 container
   .bind<CreateCategoryUseCase>(TYPES.CreateCategoryUseCase)

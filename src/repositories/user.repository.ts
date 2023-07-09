@@ -190,6 +190,67 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
 
     return result;
   }
+
+  async updatePassword(
+    userId: number,
+    password: string,
+    newPassword: string
+  ): Promise<User> {
+    const userToUpdate = await this.db.findOneByOrFail({ id_user: userId });
+
+    if (!userToUpdate) {
+      throw new Error("User not found");
+    }
+
+    const isMatch = await bcrypt.compare(password, userToUpdate.password_user);
+
+    if (!isMatch) {
+      throw new Error("Password incorrect");
+    }
+
+    const encryptPassword = await bcrypt.hash(newPassword, 8);
+
+    userToUpdate.password_user = encryptPassword;
+    userToUpdate.updated_at = new Date();
+
+    await this.db.manager.save(userToUpdate);
+
+    const userById = await this.db
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.rol", "rol")
+      .where("user.id_user = :id_user", { id_user: userId })
+      .leftJoinAndSelect("rol.activities", "activities")
+      .getOne();
+
+    if (!userById) {
+      throw new Error("User not found");
+    }
+
+    const result: any = {
+      id_user: userById.id_user,
+      name_user: userById.name_user,
+      phone_user: userById.phone_user,
+      email_user: userById.email_user,
+      status_user: userById.status_user,
+      created_at: userById.created_at,
+      updated_at: userById.updated_at,
+      rol: {
+        id_role: userById.rol.id_role,
+        name_role: userById.rol.name_role,
+        description_role: userById.rol.description_role,
+        status_role: userById.rol.status_role,
+        activities: userById.rol.activities.map((activity) => ({
+          id_activity: activity.id_activity,
+          name_activity: activity.name_activity,
+          description_activity: activity.description_activity,
+          status_activity: activity.status_activity,
+        })),
+      },
+    };
+
+    return result;
+  }
+
   async deleteUser(userId: number): Promise<boolean> {
     const userToDelete = await this.db.findOneBy({ id_user: userId });
 

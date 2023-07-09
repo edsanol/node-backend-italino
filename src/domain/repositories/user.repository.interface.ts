@@ -8,4 +8,9 @@ export interface UserRepositoryInterface {
   updateUser(userId: number, data: IUserDto): Promise<User>;
   deleteUser(userId: number): Promise<boolean>;
   loginUser(email: string, password: string): Promise<User | null>;
+  updatePassword(
+    userId: number,
+    password: string,
+    newPassword: string
+  ): Promise<User>;
 }

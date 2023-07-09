@@ -46,5 +46,10 @@ export class UserRoutes {
       validateJWT,
       this.userController.deleteUser.bind(this.userController)
     );
+    router.put(
+      "/users/:userId/password",
+      validateJWT,
+      this.userController.updatePassword.bind(this.userController)
+    );
   }
 }

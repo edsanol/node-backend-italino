@@ -10,6 +10,7 @@ import { GetAllUsersUseCase } from "../usercases/user/getAll-user.usecase";
 import { LoginUserUseCase } from "../usercases/user/login-user.usecase";
 import { generateToken } from "../utils/jwt";
 import { RequestToToken } from "../interfaces/token.interface";
+import { UpdatePasswordUseCase } from "../usercases/user/update-password.usecase";
 
 @injectable()
 export class UserController {
@@ -25,7 +26,9 @@ export class UserController {
     @inject(TYPES.GetAllUsersUseCase)
     private getAllUsersUseCase: GetAllUsersUseCase,
     @inject(TYPES.LoginUserUseCase)
-    private loginUserUseCase: LoginUserUseCase
+    private loginUserUseCase: LoginUserUseCase,
+    @inject(TYPES.UpdatePasswordUseCase)
+    private updatePasswordUseCase: UpdatePasswordUseCase
   ) {}
 
   async loginUser(req: Request, res: Response): Promise<void> {
@@ -270,6 +273,50 @@ export class UserController {
         success: false,
         message: error.message,
         error: `Error deleting user ${error.message}`,
+      });
+    }
+  }
+
+  async updatePassword(req: RequestToToken, res: Response): Promise<void> {
+    try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const userIdFromParams: number = Number(req.params.userId);
+      const password: string = req.body.password;
+      const newPassword: string = req.body.newPassword;
+      const isUpdated = await this.updatePasswordUseCase.execute(
+        userIdFromParams,
+        password,
+        newPassword
+      );
+      if (isUpdated) {
+        res.status(200).json({
+          success: true,
+          message: "User updated successfully",
+          data: isUpdated,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+          error: "User not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error updating user ${error.message}`,
       });
     }
   }
