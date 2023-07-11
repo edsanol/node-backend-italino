@@ -11,6 +11,7 @@ import { IOrderDto } from "../dto/orderDto";
 import { InventoryRepositoryInterface } from "../domain/repositories/inventory.repository.interface";
 import { OrderReturn } from "../domain/models/order-return.model";
 import { OrderReturnRepositoryInterface } from "../domain/repositories/order-return.respository.interface";
+import { IOrderStatsDto } from "dto/orderStatsDto";
 
 @injectable()
 export class OrderServiceImpl implements OrderServiceInterface {
@@ -28,6 +29,14 @@ export class OrderServiceImpl implements OrderServiceInterface {
     @inject(TYPES.OrderReturnRepository)
     private readonly orderReturnRepository: OrderReturnRepositoryInterface
   ) {}
+
+  async getOrderProduction(): Promise<Order[]> {
+    return await this.orderRepository.getOrderProduction();
+  }
+
+  async getOrderInfo(): Promise<IOrderStatsDto> {
+    return await this.orderRepository.getOrderInfo();
+  }
 
   async getOrderByReference(reference: string): Promise<Order[] | null> {
     return await this.orderRepository.getOrderByReference(reference);

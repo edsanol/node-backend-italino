@@ -5,6 +5,7 @@ import { injectable } from "inversify";
 import { Repository } from "typeorm";
 import { AppDataSource } from "../db";
 import { User } from "../domain/models/user.model";
+import { ICustomerStatsDto } from "dto/customerStatsDto";
 
 @injectable()
 export class CustomerRepositoryImpl implements CustomerRepositoryInterface {
@@ -14,6 +15,30 @@ export class CustomerRepositoryImpl implements CustomerRepositoryInterface {
   constructor() {
     this.db = AppDataSource.getRepository(Customer);
     this.dbUser = AppDataSource.getRepository(User);
+  }
+
+  async getCustomerStats(): Promise<ICustomerStatsDto> {
+    const totalCustomers = await this.db.count();
+    const activeCustomers = await this.db.count({
+      where: { status_customer: "Activo" },
+    });
+    const inactiveCustomers = await this.db.count({
+      where: { status_customer: "Inactivo" },
+    });
+    const ultimateCustomersAdded = await this.db
+      .createQueryBuilder("customer")
+      .select("COUNT(customer.id_customer)", "created_at")
+      .where("MONTH(customer.created_at) = MONTH(CURRENT_DATE())")
+      .getRawOne();
+
+    const customerStats: ICustomerStatsDto = {
+      totalCustomers,
+      activeCustomers,
+      inactiveCustomers,
+      ultimateCustomersAdded: Number(ultimateCustomersAdded?.created_at),
+    };
+
+    return customerStats;
   }
 
   async getCustomerByNameOrNIT(nameOrNit: string): Promise<Customer[] | null> {

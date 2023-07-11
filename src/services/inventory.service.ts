@@ -7,6 +7,7 @@ import { IInventoryDto } from "../dto/inventoryDto";
 import { IAddInventoryDto } from "dto/addInventoryDto";
 import { UserRepositoryInterface } from "../domain/repositories/user.repository.interface";
 import { AddInventory } from "../domain/models/add-inventory.model";
+import { IInventoryStatsDto } from "dto/inventoryStatsDto";
 
 @injectable()
 export class InventoryServiceImpl implements InventoryServiceInterface {
@@ -16,6 +17,11 @@ export class InventoryServiceImpl implements InventoryServiceInterface {
     @inject(TYPES.UserRepository)
     private userRepository: UserRepositoryInterface
   ) {}
+
+  async getInventoryStats(): Promise<IInventoryStatsDto> {
+    const response = await this.inventoryRepository.getInventoryStats();
+    return response;
+  }
 
   async getInventoriesByCategoryId(
     idCategory: number

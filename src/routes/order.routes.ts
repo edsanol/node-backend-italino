@@ -52,5 +52,15 @@ export class OrderRoutes {
       validateJWT,
       this.orderController.getOrderByReference.bind(this.orderController)
     );
+    router.get(
+      "/order-stats/stats",
+      validateJWT,
+      this.orderController.getOrderStats.bind(this.orderController)
+    );
+    router.get(
+      "/order-production",
+      validateJWT,
+      this.orderController.getOrdersProduction.bind(this.orderController)
+    );
   }
 }

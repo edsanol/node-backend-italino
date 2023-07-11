@@ -49,5 +49,10 @@ export class CustomerRoutes {
         this.customerController
       )
     );
+    router.get(
+      "/customers-stats/stats",
+      validateJWT,
+      this.customerController.getCustomerStats.bind(this.customerController)
+    );
   }
 }

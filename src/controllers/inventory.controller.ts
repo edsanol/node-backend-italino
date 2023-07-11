@@ -15,6 +15,7 @@ import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get
 import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
 import { RequestToToken } from "../interfaces/token.interface";
 import { GetInventoriesByCategoryIdUseCase } from "../usercases/inventory/get-inventories-by-category-id.usecase";
+import { GetInventoryStatsUseCase } from "../usercases/inventory/get-inventory-stats.usecase";
 
 @injectable()
 export class InventoryController {
@@ -38,7 +39,9 @@ export class InventoryController {
     @inject(TYPES.UpdateInventoryFromAppUseCase)
     private updateInventoryFromAppUseCase: UpdateInventoryFromAppUseCase,
     @inject(TYPES.GetInventoriesByCategoryIdUseCase)
-    private getInventoriesByCategoryIdUseCase: GetInventoriesByCategoryIdUseCase
+    private getInventoriesByCategoryIdUseCase: GetInventoriesByCategoryIdUseCase,
+    @inject(TYPES.GetInventoryStatsUseCase)
+    private getInventoryStatsUseCase: GetInventoryStatsUseCase
   ) {}
 
   async createInventory(req: RequestToToken, res: Response): Promise<void> {
@@ -408,6 +411,42 @@ export class InventoryController {
       res.status(500).json({
         success: false,
         message: "Error retrieving inventory",
+        error: error.message,
+      });
+    }
+  }
+
+  async getInventoryStats(req: RequestToToken, res: Response): Promise<void> {
+    try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+      const stats = await this.getInventoryStatsUseCase.execute();
+      if (stats) {
+        res.status(200).json({
+          success: true,
+          message: "Inventory stats retrieved successfully",
+          data: stats,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Inventory stats not found",
+          error: "Inventory stats not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: "Error retrieving inventory stats",
         error: error.message,
       });
     }

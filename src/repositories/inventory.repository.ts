@@ -6,6 +6,7 @@ import { AppDataSource } from "../db";
 import { Repository } from "typeorm";
 import { IInventoryDto } from "../dto/inventoryDto";
 import { AddInventory } from "../domain/models/add-inventory.model";
+import { IInventoryStatsDto } from "dto/inventoryStatsDto";
 
 @injectable()
 export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
@@ -19,9 +20,36 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     this.dbAddInventory = AppDataSource.getRepository(AddInventory);
   }
 
+  async getInventoryStats(): Promise<IInventoryStatsDto> {
+    const totalInventories = await this.db.count();
+    const activeInventories = await this.db.count({
+      where: { status_inventory: "Activo" },
+    });
+    const totalStock = await this.db
+      .createQueryBuilder("inventory")
+      .select("SUM(inventory.stock_inventory)", "total_stock")
+      .getRawOne();
+    const inactiveInventories = await this.db.count({
+      where: { status_inventory: "Inactivo" },
+    });
+    const totalInventoriesPublished = await this.db.count({
+      where: { publicated_inventory: true },
+    });
+    const inventoryStats: IInventoryStatsDto = {
+      totalInventories,
+      activeInventories,
+      totalStock: Number(totalStock?.total_stock!) || 0,
+      inactiveInventories,
+      totalInventoriesPublished,
+    };
+
+    return inventoryStats;
+  }
+
   async getInventoriesByCategoryId(
     idCategory: number
   ): Promise<Inventory[] | null> {
+    console.log("getInventoriesByCategoryId");
     const inventories = await this.db
       .createQueryBuilder("inventory")
       .leftJoinAndSelect("inventory.category", "category")
@@ -36,6 +64,7 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
   }
 
   async updateInventoryFromApp(inventory: IInventoryDto): Promise<Inventory> {
+    console.log("updateInventoryFromApp");
     const category = await this.dbCategory.findOneByOrFail({
       id_category: inventory.categoryId,
     });
@@ -69,6 +98,7 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
   async getInventoryByNameOrReference(
     nameOrReference: string
   ): Promise<Inventory[] | null> {
+    console.log("getInventoryByNameOrReference");
     const inventory = await this.db
       .createQueryBuilder("inventory")
       .leftJoinAndSelect("inventory.category", "category")
@@ -92,6 +122,7 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
   async getInventoryByIdAndAddInventory(
     idInventory: number
   ): Promise<Inventory> {
+    console.log("getInventoryByIdAndAddInventory");
     const inventory = await this.db
       .createQueryBuilder("inventory")
       .leftJoinAndSelect("inventory.category", "category")
@@ -108,10 +139,12 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
   }
 
   async addInventory(adInventory: AddInventory): Promise<AddInventory> {
+    console.log("addInventory");
     return this.dbAddInventory.save(adInventory);
   }
 
   async createInventory(inventory: IInventoryDto): Promise<Inventory> {
+    console.log("createInventory");
     const category = await this.dbCategory.findOneByOrFail({
       id_category: inventory.categoryId,
     });
@@ -133,6 +166,7 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     return this.db.manager.save(newInventory);
   }
   async getAllInventories(): Promise<Inventory[] | null> {
+    console.log("getAllInventories");
     const allInventories = await this.db
       .createQueryBuilder("inventory")
       .leftJoinAndSelect("inventory.category", "category")
@@ -147,6 +181,7 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     return allInventories;
   }
   async getInventoryById(idInventory: number): Promise<Inventory | null> {
+    console.log("getInventoryById");
     const inventory = await this.db
       .createQueryBuilder("inventory")
       .leftJoinAndSelect("inventory.category", "category")
@@ -160,11 +195,13 @@ export class InventoryRepositoryImpl implements InventoryRepositoryInterface {
     return inventory;
   }
   async updateInventory(inventory: Inventory): Promise<boolean> {
+    console.log("updateInventory");
     await this.db.manager.save(inventory);
 
     return Promise.resolve(true);
   }
   async deleteInventory(idInventory: number): Promise<boolean> {
+    console.log("deleteInventory");
     const inventoryToDelete = await this.db.findOneBy({
       id_inventory: idInventory,
     });

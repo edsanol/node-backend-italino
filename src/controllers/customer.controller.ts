@@ -10,6 +10,7 @@ import { ICustomerDto } from "../dto/customerDto";
 import { Request, Response } from "express";
 import { RequestToToken } from "../interfaces/token.interface";
 import { GetCustomerByNameOrNitUseCase } from "../usercases/customer/get-customer-by-name-or-nit.usecase";
+import { GetCustomerStatsUseCase } from "../usercases/customer/get-customer-stats.usecase";
 
 @injectable()
 export class CustomerController {
@@ -27,7 +28,9 @@ export class CustomerController {
     @inject(TYPES.GetCustomerByUserIdUseCase)
     private getCustomerByUserIdUseCase: GetCustomerByUserIdUseCase,
     @inject(TYPES.GetCustomerByNameOrNitUseCase)
-    private getCustomerByNameOrNitUseCase: GetCustomerByNameOrNitUseCase
+    private getCustomerByNameOrNitUseCase: GetCustomerByNameOrNitUseCase,
+    @inject(TYPES.GetCustomerStatsUseCase)
+    private getCustomerStatsUseCase: GetCustomerStatsUseCase
   ) {}
 
   async createCustomer(req: RequestToToken, res: Response): Promise<void> {
@@ -278,6 +281,43 @@ export class CustomerController {
           success: false,
           message: "Customer not found",
           error: "Customer not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting customer ${error.message}`,
+      });
+    }
+  }
+
+  async getCustomerStats(req: RequestToToken, res: Response): Promise<void> {
+    try {
+      const { userId, roleId } = req;
+
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+
+        return;
+      }
+
+      const stats = await this.getCustomerStatsUseCase.execute();
+      if (stats) {
+        res.status(200).json({
+          success: true,
+          message: "Customer stats",
+          data: stats,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Customer stats not found",
+          error: "Customer stats not found",
         });
       }
     } catch (error: any) {

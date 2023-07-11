@@ -69,5 +69,10 @@ export class InventoryRoutes {
         this.inventoryController
       )
     );
+    router.get(
+      "/inventories-stats/stats",
+      validateJWT,
+      this.inventoryController.getInventoryStats.bind(this.inventoryController)
+    );
   }
 }

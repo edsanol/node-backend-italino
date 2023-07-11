@@ -1,5 +1,6 @@
 import { Order } from "../domain/models/order.model";
 import { IOrderDto } from "../dto/orderDto";
+import { IOrderStatsDto } from "../dto/orderStatsDto";
 
 export interface OrderServiceInterface {
   createOrder(order: IOrderDto): Promise<Order>;
@@ -11,4 +12,6 @@ export interface OrderServiceInterface {
   getOrdersByUserId(userId: number): Promise<Order[]>;
   getOrderAndOrderReturnsById(id: number): Promise<Order | null>;
   getOrderByReference(reference: string): Promise<Order[] | null>;
+  getOrderInfo(): Promise<IOrderStatsDto>;
+  getOrderProduction(): Promise<Order[]>;
 }
