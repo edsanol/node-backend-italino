@@ -41,4 +41,17 @@ export class UserServiceImpl implements UserServiceInterface {
     const isDeleted = await this.userRepository.deleteUser(userId);
     return isDeleted;
   }
+
+  async updatePassword(
+    userId: number,
+    password: string,
+    newPassword: string
+  ): Promise<User> {
+    const isUpdated = await this.userRepository.updatePassword(
+      userId,
+      password,
+      newPassword
+    );
+    return isUpdated;
+  }
 }
