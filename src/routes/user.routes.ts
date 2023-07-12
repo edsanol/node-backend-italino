@@ -51,5 +51,13 @@ export class UserRoutes {
       validateJWT,
       this.userController.updatePassword.bind(this.userController)
     );
+    router.post(
+      "/users-recover/forgot-password",
+      this.userController.forgotPassword.bind(this.userController)
+    );
+    router.put(
+      "/users-reset/reset-password",
+      this.userController.resetPassword.bind(this.userController)
+    );
   }
 }

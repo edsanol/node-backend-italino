@@ -13,4 +13,6 @@ export interface UserServiceInterface {
     password: string,
     newPassword: string
   ): Promise<User>;
+  forgotPassword(email: string): Promise<User>;
+  resetPassword(token: string, newPassword: string): Promise<User>;
 }

@@ -97,6 +97,8 @@ import { GetCustomerStatsUseCase } from "../usercases/customer/get-customer-stat
 import { GetOrderStatsUseCase } from "../usercases/order/get-order-stats.usecase";
 import { GetOrderProductionUseCase } from "../usercases/order/get-order-production.usecase";
 import { UpdatePasswordUseCase } from "../usercases/user/update-password.usecase";
+import { ForgotPasswordUseCase } from "../usercases/user/forgot-password.usecase";
+import { ResetPasswordUseCase } from "../usercases/user/reset-password.usecase";
 
 const container = new Container();
 
@@ -173,6 +175,12 @@ container.bind<LoginUserUseCase>(TYPES.LoginUserUseCase).to(LoginUserUseCase);
 container
   .bind<UpdatePasswordUseCase>(TYPES.UpdatePasswordUseCase)
   .to(UpdatePasswordUseCase);
+container
+  .bind<ForgotPasswordUseCase>(TYPES.ForgotPasswordUseCase)
+  .to(ForgotPasswordUseCase);
+container
+  .bind<ResetPasswordUseCase>(TYPES.ResetPasswordUseCase)
+  .to(ResetPasswordUseCase);
 
 container
   .bind<CreateCategoryUseCase>(TYPES.CreateCategoryUseCase)

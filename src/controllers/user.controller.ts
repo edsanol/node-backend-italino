@@ -11,6 +11,9 @@ import { LoginUserUseCase } from "../usercases/user/login-user.usecase";
 import { generateToken } from "../utils/jwt";
 import { RequestToToken } from "../interfaces/token.interface";
 import { UpdatePasswordUseCase } from "../usercases/user/update-password.usecase";
+import { transporter, forgoted } from "../utils/mailer";
+import { ForgotPasswordUseCase } from "../usercases/user/forgot-password.usecase";
+import { ResetPasswordUseCase } from "../usercases/user/reset-password.usecase";
 
 @injectable()
 export class UserController {
@@ -28,7 +31,11 @@ export class UserController {
     @inject(TYPES.LoginUserUseCase)
     private loginUserUseCase: LoginUserUseCase,
     @inject(TYPES.UpdatePasswordUseCase)
-    private updatePasswordUseCase: UpdatePasswordUseCase
+    private updatePasswordUseCase: UpdatePasswordUseCase,
+    @inject(TYPES.ForgotPasswordUseCase)
+    private forgotPasswordUseCase: ForgotPasswordUseCase,
+    @inject(TYPES.ResetPasswordUseCase)
+    private resetPasswordUseCase: ResetPasswordUseCase
   ) {}
 
   async loginUser(req: Request, res: Response): Promise<void> {
@@ -310,6 +317,69 @@ export class UserController {
           success: false,
           message: "User not found",
           error: "User not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error updating user ${error.message}`,
+      });
+    }
+  }
+
+  async forgotPassword(req: RequestToToken, res: Response): Promise<void> {
+    try {
+      const { email } = req.body;
+      const user = await this.forgotPasswordUseCase.execute(email);
+
+      if (user) {
+        const token = await generateToken(user.id_user, user.rol.id_role);
+
+        await transporter.sendMail(forgoted(user, token));
+
+        res.status(200).json({
+          success: true,
+          message: "Email sent successfully",
+          data: user,
+          token,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "User not found",
+          error: "User not found",
+        });
+      }
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error updating user ${error.message}`,
+      });
+    }
+  }
+
+  async resetPassword(req: RequestToToken, res: Response): Promise<void> {
+    try {
+      const { token, newPassword } = req.body;
+
+      const resetPassword = await this.resetPasswordUseCase.execute(
+        token,
+        newPassword
+      );
+
+      if (resetPassword) {
+        res.status(200).json({
+          success: true,
+          message: "Password reset successfully",
+          data: resetPassword,
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Password could not be updated",
+          error: "Password could not be updated",
         });
       }
     } catch (error: any) {
