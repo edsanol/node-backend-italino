@@ -12,6 +12,7 @@ import { InventoryRepositoryInterface } from "../domain/repositories/inventory.r
 import { OrderReturn } from "../domain/models/order-return.model";
 import { OrderReturnRepositoryInterface } from "../domain/repositories/order-return.respository.interface";
 import { IOrderStatsDto } from "dto/orderStatsDto";
+import { io } from "../app";
 
 @injectable()
 export class OrderServiceImpl implements OrderServiceInterface {
@@ -250,6 +251,8 @@ export class OrderServiceImpl implements OrderServiceInterface {
       throw new Error("Order not found");
     }
 
+    io.emit("nuevaOrden", { mensaje: "Nueva orden recibida" });
+
     return orderCreated;
   }
 
@@ -280,6 +283,10 @@ export class OrderServiceImpl implements OrderServiceInterface {
           await this.inventoryRepository.updateInventory(inventoryItem);
         })
       );
+    }
+
+    if (newOrder.status_order === "Entregado") {
+      io.emit("nuevaProducción", { mensaje: "Nuevo pedido a producción" });
     }
 
     await this.orderRepository.updateOrder(newOrder);
