@@ -11,6 +11,8 @@ import { CreateReturnOrderUseCase } from "../usercases/order/create-return.useca
 import { GetOrderAndReturnByIdUseCase } from "../usercases/order/get-order-and-return-by-id.usecase";
 import { GetOrderByReferenceUseCase } from "../usercases/order/get-order-by-reference.usecase";
 import { RequestToToken } from "../interfaces/token.interface";
+import { GetOrderStatsUseCase } from "../usercases/order/get-order-stats.usecase";
+import { GetOrderProductionUseCase } from "../usercases/order/get-order-production.usecase";
 
 @injectable()
 export class OrderController {
@@ -30,7 +32,11 @@ export class OrderController {
     @inject(TYPES.GetOrderAndReturnByIdUseCase)
     private readonly getOrderAndReturnByIdUseCase: GetOrderAndReturnByIdUseCase,
     @inject(TYPES.GetOrderByReferenceUseCase)
-    private readonly getOrderByReferenceUseCase: GetOrderByReferenceUseCase
+    private readonly getOrderByReferenceUseCase: GetOrderByReferenceUseCase,
+    @inject(TYPES.GetOrderStatsUseCase)
+    private readonly getOrderStatsUseCase: GetOrderStatsUseCase,
+    @inject(TYPES.GetOrderProductionUseCase)
+    private readonly getOrderProductionUseCase: GetOrderProductionUseCase
   ) {}
 
   async createOrder(req: RequestToToken, res: Response) {
@@ -270,6 +276,58 @@ export class OrderController {
         success: false,
         message: error.message,
         error: `Error getting order by reference ${error.message}`,
+      });
+    }
+  }
+
+  async getOrderStats(req: RequestToToken, res: Response) {
+    try {
+      const { userId, roleId } = req;
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+        return;
+      }
+      const orderStats = await this.getOrderStatsUseCase.execute();
+      res.status(201).json({
+        success: true,
+        message: "Order stats",
+        data: orderStats,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting order stats ${error.message}`,
+      });
+    }
+  }
+
+  async getOrdersProduction(req: RequestToToken, res: Response) {
+    try {
+      const { userId, roleId } = req;
+      if (!userId || !roleId) {
+        res.status(401).json({
+          success: false,
+          message: "No token provided",
+          error: `No token provided`,
+        });
+        return;
+      }
+      const ordersProduction = await this.getOrderProductionUseCase.execute();
+      res.status(201).json({
+        success: true,
+        message: "Orders production",
+        data: ordersProduction,
+      });
+    } catch (error: any) {
+      res.status(500).json({
+        success: false,
+        message: error.message,
+        error: `Error getting orders production ${error.message}`,
       });
     }
   }

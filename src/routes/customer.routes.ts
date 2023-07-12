@@ -42,5 +42,17 @@ export class CustomerRoutes {
       validateJWT,
       this.customerController.getCustomerByUserId.bind(this.customerController)
     );
+    router.get(
+      "/customers/search/:nameOrNit",
+      validateJWT,
+      this.customerController.getCustomerByNameOrNit.bind(
+        this.customerController
+      )
+    );
+    router.get(
+      "/customers-stats/stats",
+      validateJWT,
+      this.customerController.getCustomerStats.bind(this.customerController)
+    );
   }
 }

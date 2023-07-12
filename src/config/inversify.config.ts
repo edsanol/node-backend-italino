@@ -90,7 +90,12 @@ import { GetInventoryByNameOrReferenceUseCase } from "../usercases/inventory/get
 import { GetOrderAndReturnByIdUseCase } from "../usercases/order/get-order-and-return-by-id.usecase";
 import { GetOrderByReferenceUseCase } from "../usercases/order/get-order-by-reference.usecase";
 import { UpdateInventoryFromAppUseCase } from "../usercases/inventory/update-inventory-app.usecase";
+import { GetCustomerByNameOrNitUseCase } from "../usercases/customer/get-customer-by-name-or-nit.usecase";
 import { GetInventoriesByCategoryIdUseCase } from "../usercases/inventory/get-inventories-by-category-id.usecase";
+import { GetInventoryStatsUseCase } from "../usercases/inventory/get-inventory-stats.usecase";
+import { GetCustomerStatsUseCase } from "../usercases/customer/get-customer-stats.usecase";
+import { GetOrderStatsUseCase } from "../usercases/order/get-order-stats.usecase";
+import { GetOrderProductionUseCase } from "../usercases/order/get-order-production.usecase";
 import { UpdatePasswordUseCase } from "../usercases/user/update-password.usecase";
 import { ForgotPasswordUseCase } from "../usercases/user/forgot-password.usecase";
 import { ResetPasswordUseCase } from "../usercases/user/reset-password.usecase";
@@ -227,6 +232,9 @@ container
     TYPES.GetInventoriesByCategoryIdUseCase
   )
   .to(GetInventoriesByCategoryIdUseCase);
+container
+  .bind<GetInventoryStatsUseCase>(TYPES.GetInventoryStatsUseCase)
+  .to(GetInventoryStatsUseCase);
 
 container
   .bind<CreateActivityUseCase>(TYPES.CreateActivityUseCase)
@@ -276,6 +284,12 @@ container
 container
   .bind<GetCustomerByUserIdUseCase>(TYPES.GetCustomerByUserIdUseCase)
   .to(GetCustomerByUserIdUseCase);
+container
+  .bind<GetCustomerByNameOrNitUseCase>(TYPES.GetCustomerByNameOrNitUseCase)
+  .to(GetCustomerByNameOrNitUseCase);
+container
+  .bind<GetCustomerStatsUseCase>(TYPES.GetCustomerStatsUseCase)
+  .to(GetCustomerStatsUseCase);
 
 container
   .bind<CreateOrderUseCase>(TYPES.CreateOrderUseCase)
@@ -301,6 +315,12 @@ container
 container
   .bind<GetOrderByReferenceUseCase>(TYPES.GetOrderByReferenceUseCase)
   .to(GetOrderByReferenceUseCase);
+container
+  .bind<GetOrderStatsUseCase>(TYPES.GetOrderStatsUseCase)
+  .to(GetOrderStatsUseCase);
+container
+  .bind<GetOrderProductionUseCase>(TYPES.GetOrderProductionUseCase)
+  .to(GetOrderProductionUseCase);
 
 // Controllers
 container.bind<UserController>(TYPES.UserController).to(UserController);

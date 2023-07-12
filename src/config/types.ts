@@ -47,6 +47,7 @@ const TYPES = {
   GetInventoriesByCategoryIdUseCase: Symbol.for(
     "GetInventoriesByCategoryIdUseCase"
   ),
+  GetInventoryStatsUseCase: Symbol.for("GetInventoryStatsUseCase"),
 
   CreateActivityUseCase: Symbol.for("CreateActivityUseCase"),
   GetAllActivitiesUseCase: Symbol.for("GetAllActivitiesUseCase"),
@@ -66,6 +67,8 @@ const TYPES = {
   GetCustomerUseCase: Symbol.for("GetCustomerUseCase"),
   UpdateCustomerUseCase: Symbol.for("UpdateCustomerUseCase"),
   GetCustomerByUserIdUseCase: Symbol.for("GetCustomerByUserIdUseCase"),
+  GetCustomerByNameOrNitUseCase: Symbol.for("GetCustomerByNameOrNitUseCase"),
+  GetCustomerStatsUseCase: Symbol.for("GetCustomerStatsUseCase"),
 
   CreateOrderUseCase: Symbol.for("CreateOrderUseCase"),
   GetAllOrdersUseCase: Symbol.for("GetAllOrdersUseCase"),
@@ -75,6 +78,8 @@ const TYPES = {
   CreateReturnOrderUseCase: Symbol.for("CreateReturnOrderUseCase"),
   GetOrderAndReturnByIdUseCase: Symbol.for("GetOrderAndReturnByIdUseCase"),
   GetOrderByReferenceUseCase: Symbol.for("GetOrderByReferenceUseCase"),
+  GetOrderStatsUseCase: Symbol.for("GetOrderStatsUseCase"),
+  GetOrderProductionUseCase: Symbol.for("GetOrderProductionUseCase"),
 
   UserController: Symbol.for("UserController"),
   CategoryController: Symbol.for("CategoryController"),

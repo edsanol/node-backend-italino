@@ -4,6 +4,7 @@ import { CustomerRepositoryInterface } from "../domain/repositories/customer.rep
 import { TYPES } from "../config/types";
 import { Customer } from "../domain/models/customer.model";
 import { ICustomerDto } from "../dto/customerDto";
+import { ICustomerStatsDto } from "dto/customerStatsDto";
 
 @injectable()
 export class CustomerServiceImpl implements CustomerServiceInterface {
@@ -11,6 +12,17 @@ export class CustomerServiceImpl implements CustomerServiceInterface {
     @inject(TYPES.CustomerRepository)
     private customerRepository: CustomerRepositoryInterface
   ) {}
+
+  async getCustomerStats(): Promise<ICustomerStatsDto> {
+    const customerStats = await this.customerRepository.getCustomerStats();
+    return customerStats;
+  }
+
+  async getCustomerByNameOrNIT(nameOrNit: string): Promise<Customer[] | null> {
+    const customerByNameOrNit =
+      await this.customerRepository.getCustomerByNameOrNIT(nameOrNit);
+    return customerByNameOrNit;
+  }
 
   async createCustomer(customer: ICustomerDto): Promise<Customer> {
     const newCustomer = await this.customerRepository.createCustomer(customer);

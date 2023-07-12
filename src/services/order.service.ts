@@ -11,6 +11,8 @@ import { IOrderDto } from "../dto/orderDto";
 import { InventoryRepositoryInterface } from "../domain/repositories/inventory.repository.interface";
 import { OrderReturn } from "../domain/models/order-return.model";
 import { OrderReturnRepositoryInterface } from "../domain/repositories/order-return.respository.interface";
+import { IOrderStatsDto } from "dto/orderStatsDto";
+import { io } from "../app";
 
 @injectable()
 export class OrderServiceImpl implements OrderServiceInterface {
@@ -28,6 +30,14 @@ export class OrderServiceImpl implements OrderServiceInterface {
     @inject(TYPES.OrderReturnRepository)
     private readonly orderReturnRepository: OrderReturnRepositoryInterface
   ) {}
+
+  async getOrderProduction(): Promise<Order[]> {
+    return await this.orderRepository.getOrderProduction();
+  }
+
+  async getOrderInfo(): Promise<IOrderStatsDto> {
+    return await this.orderRepository.getOrderInfo();
+  }
 
   async getOrderByReference(reference: string): Promise<Order[] | null> {
     return await this.orderRepository.getOrderByReference(reference);
@@ -207,7 +217,6 @@ export class OrderServiceImpl implements OrderServiceInterface {
     }
 
     const newOrder = new Order();
-    // reference_order ital + random
     newOrder.reference_order = `IT${Math.floor(Math.random() * 1000000000)}`;
     newOrder.customer = customer;
     newOrder.user = user;
@@ -234,29 +243,17 @@ export class OrderServiceImpl implements OrderServiceInterface {
       })
     );
 
-    const returnOrder: any = {
-      customer: {
-        id_customer: createdOrder.customer.id_customer,
-        name_customer: createdOrder.customer.name_customer,
-        address_customer: createdOrder.customer.address_customer,
-        phone_customer: createdOrder.customer.phone_customer,
-      },
-      user: {
-        id_user: createdOrder.user.id_user,
-        name_user: createdOrder.user.name_user,
-        rol: {
-          id_rol: createdOrder.user.rol.id_role,
-          name_rol: createdOrder.user.rol.name_role,
-        },
-      },
-      status_order: createdOrder.status_order,
-      payment_order: createdOrder.payment_order,
-      type_order: createdOrder.type_order,
-      total_order: createdOrder.total_order,
-      id_order: createdOrder.id_order,
-    };
+    const orderCreated = await this.orderRepository.getOrderById(
+      createdOrder.id_order
+    );
 
-    return returnOrder;
+    if (!orderCreated) {
+      throw new Error("Order not found");
+    }
+
+    io.emit("nuevaOrden", { mensaje: "Nueva orden recibida" });
+
+    return orderCreated;
   }
 
   async getAllOrders(): Promise<Order[]> {
@@ -286,6 +283,10 @@ export class OrderServiceImpl implements OrderServiceInterface {
           await this.inventoryRepository.updateInventory(inventoryItem);
         })
       );
+    }
+
+    if (newOrder.status_order === "Entregado") {
+      io.emit("nuevaProducción", { mensaje: "Nuevo pedido a producción" });
     }
 
     await this.orderRepository.updateOrder(newOrder);
