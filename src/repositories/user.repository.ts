@@ -6,6 +6,8 @@ import { injectable } from "inversify";
 import { IUserDto } from "../dto/userDto";
 import { Role } from "../domain/models/role.model";
 import bcrypt from "bcrypt";
+import { passwordChanged, transporter } from "../utils/mailer";
+import jwt from "jsonwebtoken";
 
 @injectable()
 export class UserRepositoryImpl implements UserRepositoryInterface {
@@ -261,5 +263,109 @@ export class UserRepositoryImpl implements UserRepositoryInterface {
     await this.db.manager.remove(userToDelete);
 
     return Promise.resolve(true);
+  }
+
+  async forgotPassword(email: string): Promise<User> {
+    const userToUpdate = await this.db.findOneByOrFail({ email_user: email });
+
+    if (!userToUpdate) {
+      throw new Error("User not found");
+    }
+
+    const userByEmail = await this.db
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.rol", "rol")
+      .where("user.email_user = :email_user", { email_user: email })
+      .leftJoinAndSelect("rol.activities", "activities")
+      .getOne();
+
+    if (!userByEmail) {
+      throw new Error("User not found");
+    }
+
+    const result: any = {
+      id_user: userByEmail.id_user,
+      name_user: userByEmail.name_user,
+      phone_user: userByEmail.phone_user,
+      email_user: userByEmail.email_user,
+      status_user: userByEmail.status_user,
+      created_at: userByEmail.created_at,
+      updated_at: userByEmail.updated_at,
+      rol: {
+        id_role: userByEmail.rol.id_role,
+        name_role: userByEmail.rol.name_role,
+        description_role: userByEmail.rol.description_role,
+        status_role: userByEmail.rol.status_role,
+        activities: userByEmail.rol.activities.map((activity) => ({
+          id_activity: activity.id_activity,
+          name_activity: activity.name_activity,
+          description_activity: activity.description_activity,
+          status_activity: activity.status_activity,
+        })),
+      },
+    };
+
+    return result;
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<User> {
+    const decoded: any = jwt.verify(
+      token,
+      String(process.env.TOKEN_SECRET_KEY)
+    );
+
+    const idUser = decoded.id;
+
+    const userToUpdate = await this.db.findOneByOrFail({
+      id_user: idUser,
+    });
+
+    if (!userToUpdate) {
+      throw new Error("User not found");
+    }
+
+    const encryptPassword = await bcrypt.hash(newPassword, 8);
+
+    userToUpdate.password_user = encryptPassword;
+    userToUpdate.updated_at = new Date();
+
+    await this.db.manager.save(userToUpdate);
+
+    await transporter.sendMail(passwordChanged(userToUpdate));
+
+    const userById = await this.db
+      .createQueryBuilder("user")
+      .leftJoinAndSelect("user.rol", "rol")
+      .where("user.id_user = :id_user", { id_user: idUser })
+      .leftJoinAndSelect("rol.activities", "activities")
+      .getOne();
+
+    if (!userById) {
+      throw new Error("User not found");
+    }
+
+    const result: any = {
+      id_user: userById.id_user,
+      name_user: userById.name_user,
+      phone_user: userById.phone_user,
+      email_user: userById.email_user,
+      status_user: userById.status_user,
+      created_at: userById.created_at,
+      updated_at: userById.updated_at,
+      rol: {
+        id_role: userById.rol.id_role,
+        name_role: userById.rol.name_role,
+        description_role: userById.rol.description_role,
+        status_role: userById.rol.status_role,
+        activities: userById.rol.activities.map((activity) => ({
+          id_activity: activity.id_activity,
+          name_activity: activity.name_activity,
+          description_activity: activity.description_activity,
+          status_activity: activity.status_activity,
+        })),
+      },
+    };
+
+    return result;
   }
 }

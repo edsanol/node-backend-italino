@@ -54,4 +54,17 @@ export class UserServiceImpl implements UserServiceInterface {
     );
     return isUpdated;
   }
+
+  async forgotPassword(email: string): Promise<User> {
+    const forgotPassword = await this.userRepository.forgotPassword(email);
+    return forgotPassword;
+  }
+
+  async resetPassword(token: string, newPassword: string): Promise<User> {
+    const isUpdated = await this.userRepository.resetPassword(
+      token,
+      newPassword
+    );
+    return isUpdated;
+  }
 }
