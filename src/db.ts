@@ -34,4 +34,9 @@ export const AppDataSource = new DataSource({
     rejectUnauthorized: false,
   },
   synchronize: true,
+  connectTimeout: 30000,
+  acquireTimeout: 30000,
+  extra: {
+    connectionLimit: 1000,
+  },
 });
