@@ -30,8 +30,8 @@ export const AppDataSource = new DataSource({
     AddInventory,
   ],
   logging: true,
-  // ssl: {
-  //   rejectUnauthorized: false,
-  // },
+  ssl: {
+    rejectUnauthorized: false,
+  },
   synchronize: true,
 });
