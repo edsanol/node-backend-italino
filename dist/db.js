@@ -35,5 +35,10 @@ exports.AppDataSource = new typeorm_1.DataSource({
     ssl: {
         rejectUnauthorized: false,
     },
-    synchronize: true,
+    // synchronize: true,
+    connectTimeout: 30000,
+    acquireTimeout: 30000,
+    extra: {
+        connectionLimit: 1000,
+    },
 });
