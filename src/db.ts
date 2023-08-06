@@ -33,10 +33,10 @@ export const AppDataSource = new DataSource({
   ssl: {
     rejectUnauthorized: false,
   },
-  synchronize: true,
-  connectTimeout: 30000,
-  acquireTimeout: 30000,
-  extra: {
-    connectionLimit: 1000,
-  },
+  // synchronize: true,
+  // connectTimeout: 30000,
+  // acquireTimeout: 30000,
+  // extra: {
+  //   connectionLimit: 1000,
+  // },
 });
